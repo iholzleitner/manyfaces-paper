@@ -44,6 +44,12 @@ bibliography: references.bib
 #| include: false
 
 library(tidyverse)
+#devtools::install_github("debruine/webmorphR@dev")
+library(webmorphR)
+
+# Rating data
+data_models <- read_csv("data/manyfaces-pilot-models_cleaned.csv",
+                     show_col_types = FALSE)
 
 # Rating data
 data_exp <- read_csv("data/manyfaces-pilot-exp_cleaned.csv",
@@ -51,6 +57,9 @@ data_exp <- read_csv("data/manyfaces-pilot-exp_cleaned.csv",
 
 # Questionnaire data
 data_qu <- read_csv("data/manyfaces-pilot-quest_cleaned.csv",
+                    show_col_types = FALSE)
+
+data_excl <- read_csv("data/exclusions.csv",
                     show_col_types = FALSE)
 
 theme_set(theme_bw(base_size = 14))
@@ -67,25 +76,30 @@ theme_set(theme_bw(base_size = 14))
 A wealth of face stimulus databases exist, created for varying purposes. Many of these are available for research use (see e.g., face image meta-database to search many of these)
 
 Many studies use the same stimulus databases (e.g., CFD, AFD, Karolinska – check citations of the big ones)
+
 * This can cause issues in terms of generalisability 
 * Participants online may become familiar with frequently used stimuli
 
 Other studies use stimuli they collect themselves but cannot necessarily share for ethical reasons
+
 * These are often not well-documented, creates an issue for transparency & replication attempts (can cite Grim Image preprint)
 
 There are also limitations in terms of many databases’ diversity of stimuli (e.g., many include only White or Western targets/models)
+
 * Recent databases are improving on this (e.g., Hawaii face database, mixed-race database – check Zotero for recent saved papers)
 * Setups for collecting database-like images are expensive and complex, not feasible for everyone and everywhere - this limits diversity/generalizability because of who can collect stimuli & where
 
 Crucially, most databases are static. Once collected, the number of stimuli available does not change. (exception: CFD)
 
 Big team science
-*to improve psychology, big team science initiatives and collaborations are vital. 
+
+* to improve psychology, big team science initiatives and collaborations are vital. 
 * One such collaboration is ManyFaces, involving different areas of face research. 
 
 ### The current work
 
 Sought to address the limitations of existing databases
+
 * Collected face images in the lab for experimental control & to have associated demographic data + from consenting individuals (vs scraping images from online) 
 * Developed a reproducible and openly-available protocol for face image collection, collecting multiple images per target/model to benefit a wide array of possible research areas/questions
 * Transparently documents the process of image collection
@@ -116,7 +130,10 @@ The team developed and pre-tested a protocol for collecting standardized and rep
 
 Prior to beginning data collection, the team pre-tested the protocol to ensure clarity of instructions and consistency of images collected across sites. We revised details within the protocol to resolve issues that arose (e.g., revised facial expression elicitation instructions, clarified camera settings). The final protocol can be found at [https://docs.google.com/document/d/1D9TPGXCgTRZi7nqEIg6jb42R4gNQx9L3qasg8tFvu1I/edit?usp=sharing]. In sum, the protocol detailed the following:
 
-##### Image Types. The protocol defined the categories of images in terms of their standardisation of appearance, viewing angle, and facial expression. 
+##### Image Types. 
+
+The protocol defined the categories of images in terms of their standardisation of appearance, viewing angle, and facial expression.
+
 * Standardisation of Appearance. In the *standardised* images models wore a white t-shirt, had their hair pulled back or covered, included no adornments/accessories (excepting those that could not be removed for cultural reasons), and wore minimal or no makeup. In contrast, *unstandardised* images showed models in their own clothing, with their hair as they came into the lab, and with adornments excepting glasses or anything obscuring the face or neck.  
 * Viewing Angle. *Full frontal portraits* showed models facing the camera, *left and right profile portraits* showed each side of models’ faces in profile, and *left and right ¾ portraits* showed models’ faces at a 45-degree angle from the axis of the camera.  
 * Facial Expression. *Neutral* images were of models refraining from making any facial expression, *natural* images displayed a natural expression for the model, and each facial expression of emotion displayed the expression the model would make if they were feeling the specified emotion (e.g., happiness).
@@ -160,18 +177,50 @@ Finally, the protocol detailed how to prepare and position models and how to tak
 
 #### Stimulus Collection
 
-Following the protocol, 20 labs (1 in Austria, 2 in Brazil, 2 in Canada, 2 in Germany, 1 in Israel, 3 in Malaysia, 1 in Mexico, 1 in the Netherlands, 1 in Serbia, 4 in the UK, and 2 in the US) collected images of an average of 10 models per site. As specified by the protocol, researchers collected multiple images of each model, within the time constraints of the study session.
+```{r}
+lab_n <- data_models$lab_id |> unique() |> length()
+
+models_per_site <- count(data_models, lab_id)$n
+mean_mps <- mean(models_per_site) |> round(1)
+```
+
+
+Following the protocol, `r lab_n` labs (1 in Austria, 2 in Brazil, 2 in Canada, 2 in Germany, 1 in Israel, 3 in Malaysia, 1 in Mexico, 1 in the Netherlands, 1 in Serbia, 4 in the UK, and 2 in the US) collected images of an average of `r mean_mps` models per site. As specified by the protocol, researchers collected multiple images of each model, within the time constraints of the study session.
 
 Models furthermore completed a demographic questionnaire <!-- PDF is here, add to OSF: https://drive.google.com/file/d/1EkX4jCkwpFb-Cwi9yWge_JrNbus5re6W/view*--> via Experimentum, reporting their age, gender, ethnicity, height, and weight. They also reported whether or not they were wearing makeup (specifying what kinds, e.g., foundation, eye makeup, semi-permanent makeup) and whether they had ever experienced anything that could affect the shape of their face (e.g., broken nose, cosmetic surgery or injections, orthodontic work) and specified this if they were willing. Finally, they completed a debriefing questionnaire <!-- PDF is here, add to OSF: https://drive.google.com/file/d/1XFlAdcMZAEcC1NGIJeaOHbx3BYPwzYqn/view*--> asking them about their experience of posing for the images (e.g., whether instructions were clear, whether any part of the process was uncomfortable).
 
 ### Results
+
 #### Images
-211 total models provided their images, following withdrawals and exclusions for poor image quality. @tbl-images-per-type details the number of models for each kind of photo. Example images are shown in @fig-img-examples. Images are available for research use and can be requested here: [link] <!--add: link to where the images can be requested-->
+
+```{r}
+model_n <- nrow(data_models)
+```
+
+
+`r model_n` total models provided their images, following withdrawals and exclusions for poor image quality. @tbl-images-per-type details the number of models for each kind of photo. Example images are shown in @fig-img-examples. Images are available for research use and can be requested here: [link] <!--add: link to where the images can be requested-->
 
 ```{r}
 #| label: tbl-images-per-type
+#| tbl-cap: The number of images available for each image type. The column `std` is for standardised images, with neutral clothing, no makeup, and hair pulled back, while `unstd` is for unstandardised images with natural hair and makeup.
 
-data.frame()
+emo_levels <- c(neu = "neutral", 
+                ang = "anger", 
+                dis = "disgust", 
+                fea = "fear", 
+                hap = "happy", 
+                sad = "sad", 
+                sur = "surprised")
+
+data_models |>
+  select(model_id:unstd_neu) |>
+  pivot_longer(std_ang:unstd_neu) |>
+  filter(value == 1) |>
+  count(name) |>
+  separate(name, c("type", "emotion")) |>
+  pivot_wider(names_from = type, values_from = n) |>
+  mutate(emotion = factor(emotion, names(emo_levels), emo_levels)) |>
+  arrange(emotion)
 ```
 
 ```{r}
