@@ -67,58 +67,36 @@ theme_set(theme_bw(base_size = 14))
 
 ## Introduction
 
-* Centrality of the face in human perception & in research
-* Variety of social perception & recognition topics that use face stimuli 
-* Importance of open & transparent methods, current limits for this in terms of stimuli currently
+Faces are rich sources of information and play a key role in human social perception, strongly drawing attention, informing social inferences, and serving as a primary means of person recognition (e.g., Zebrowitz, 2010; <!--add refs, including recognition sources-->). Various subfields within psychology—including vision science, person perception, social cognition, affective science, and person recognition<!--others?-->—address research questions involving faces and necessitating the use of face images as stimuli. Here, we introduce a novel face image database for research use. This database addresses various limitations of extant available databases and crucially takes a transparent approach, to align with Open Science best practice.
 
 ### Existing face databases
 
-A wealth of face stimulus databases exist, created for varying purposes. Many of these are available for research use (see e.g., face image meta-database to search many of these)
+A wealth of face stimulus databases exist, created for varying purposes. Many of these are available for research use (see e.g., Workman & Chatterjee 2021 face image meta-database to search many of these<!--cite-->). Researchers therefore have access to a broad variety of existing databases, well-suited to address questions in each subfield. For example, there exist many different databases in which photographed individuals (targets or models) display difference facial expressions of emotion (of use to affective scientists), appear in multiple photos varying in their lighting or angle (useful to person recognition researchers), or belong to various age or racial/ethnic groups (helpful to person perception researchers). However, many studies use the same stimulus databases, which introduces possible problems. For example, 4107 <!--update number before submission-->published papers cite the Karolinska Directed Emotional Faces (Lundquist et al., 1998<!--add ref-->), 2461<!--update number--> cite the Chicago Face Database (Ma et al. <!--add ref-->), and 675 <!--update number-->the Amsterdam Dynamic Facial Expression Set (van der Schalk et al., 2011 <!--add ref-->)<!--other examples to highlight?-->. This frequent use of the same sets of stimuli can cause issues in terms of generalizability if various research questions are tested on only a limited sample of face images. Participants, especially those participating online, may also become familiar with frequently-used stimuli, potentially introducing biases to their responses. 
 
-Many studies use the same stimulus databases (e.g., CFD, AFD, Karolinska – check citations of the big ones)
+Of course, not all research involving face images uses stimuli from published databases. Other studies use stimuli collected by the researchers themselves but which they may not be able to share with the research community (e.g., due to ethical limitations). Although this circumvents the issues noted above for frequently-used databases, this introduces its own problems. Chiefly, face images collected by researchers for their own research use are often not well-documented. Although the resulting images may be described and/or illustrated with an example, the process of image collection is rarely described in detail. This is often the case for even those databases that are available for other researchers to use. This lack of documentation limits transparency and can create problems for replication attempts (for example, another researcher attempting to replicate a finding using new face images collected themselves, rather than the images collected by the original researchers; see Třebický et al. 2024 Grim Image preprint <!--add ref-->). 
 
-* This can cause issues in terms of generalisability 
-* Participants online may become familiar with frequently used stimuli
+There are also limitations in terms of many databases’ (both those publicly available and those not) diversity of stimuli. For example, many include images of only White or Western targets/models (e.g., see Cook & Over 2021 <!--add ref-->). This reinforces the centering of Whitness and Western culture in psychological research, importantly limiting the ecological validity and generalizability of conclusions. Recent databases have sought to address this, specifically collecting images of multiracial and non-Western samples, for example (e.g., Chen et al., 2020; Meyers et al., 2024; Trzewik et al., 2025<!--add refs-->), but more such work is needed to further diversify the pool of available face research stimuli. Many world regions remain underrepresented <!--note examples?-->. This may be due, in part, to resource limitations: Equipment and setups for collecting images suitable for research use can be expensive and complex, making database collection not feasible for everyone and everywhere, thus limiting database diversity. Furthermore, to date, no extant database contains images of individuals from *multiple* world regions<!--verify-->.
 
-Other studies use stimuli they collect themselves but cannot necessarily share for ethical reasons
+A final limitation to extant face image databases is their largely static nature. That is, once collected, the number of stimuli available does not change. There are some exceptions to this, with multiple waves of additions to the Chicago Face Database (Ma et al<!--add ref-->), for example. Continued additions to databases are not the norm, however. This not only constrains the number of stimuli in any given database, increasing the likelihood of the frequent reuse of any individual stimulus (with the associated issues of this discussed above), but can also render some databases obsolete after some time (e.g., due to very dated model appearance/styling).
 
-* These are often not well-documented, creates an issue for transparency & replication attempts (can cite Grim Image preprint)
+### Open Science considerations
 
-There are also limitations in terms of many databases’ diversity of stimuli (e.g., many include only White or Western targets/models)
+Open and transparent methods are essential for fully understanding, evaluating, and replicating research. Although methods reporting has become more open and accessible with researchers sharing materials such as questionnaire wording, stimuli, and programming scripts, the reporting of face image database collection procedures often lacks crucial details for full transparency and reproducibility—even among recent databases. This matters, because differences in details such as focal length can importantly affect faces' appearance, subsequently impacting perceptions of them (Třebický et al. 2016; see Třebický et al. 2024 Grim Image preprint for further discussion <!--add refs-->).
 
-* Recent databases are improving on this (e.g., Hawaii face database, mixed-race database – check Zotero for recent saved papers)
-* Setups for collecting database-like images are expensive and complex, not feasible for everyone and everywhere - this limits diversity/generalizability because of who can collect stimuli & where
-
-Crucially, most databases are static. Once collected, the number of stimuli available does not change. (exception: CFD)
-
-Big team science
-
-* to improve psychology, big team science initiatives and collaborations are vital. 
-* One such collaboration is ManyFaces, involving different areas of face research. 
+Big Team Science endeavors and large-scale collaborations are another vital part of improving science. Within psychology, multiple such initiatives have importantly contributed to addressing a variety of research questions, improving diversity and generalizability in the field (e.g., in the domain of face perception, Psychological Science Accelerator project Jones et al. 2021 <!--add ref-->). Such an approach has yet to be applied to stimulus database collection, but represents an opportunity to address many of the limitations of face image databases.
 
 ### The current work
 
-Sought to address the limitations of existing databases
+Here, we sought to address the limitations of existing face image databases through a Big Team Science approach. This served as the first project of ManyFaces, an international consortium of face perception and recognition researchers formed in 2022.
 
-* Collected face images in the lab for experimental control & to have associated demographic data + from consenting individuals (vs scraping images from online) 
-* Developed a reproducible and openly-available protocol for face image collection, collecting multiple images per target/model to benefit a wide array of possible research areas/questions
-* Transparently documents the process of image collection
-* Enables reproducibility
-* The database can be added to in the future (i.e., it will not be static)
-* Collected images following the protocol in 20 different labs across the world (specify # of countries, world regions - compare to existing databases?)
-* Diverse set of models (more so than possible to collect at just one lab)
-* Recruited online perceivers to rate a subset of the images (i.e., front-facing images) to generate norming data
-* Make the database available for future research
+To address issues of transparency and reproducibility, we developed a reproducible and openly-available protocol for face image collection. The protocol covers collecting multiple images (varying in standardization, viewing angle, and facial expression) of each target/model to benefit a wide array of possible research areas and questions related to face perception and recognition. We then collected images following this protocol in 20 different labs across the world, spanning 11 countries and five world regions (Europe, Latin America, North America, the Middle East, and Southeast Asia). <!--compare to existing databases?--> This resulted in a diverse set of models and images, more so than would be possible to collect in just one lab. This database is moreover not static, but can be added to in the future by any interested researcher following the protocol. We next validated the database by recruiting online perceivers to rate a subset of the images (i.e., front-facing images) to generate norming data for key social trait perceptions and emotion recognition. We make the image database and norming available for future research
 
 Altogether, we introduce a new, diverse, openly-available face stimulus set that will continue to grow in the future. We hope that this will broaden the generalizability of findings in face perception and recognition research.
 
 
 ## Study/phase 1: Protocol development & stimulus collection
 
-To set big team science in motion and conduct multi-site studies, we must collect material suitable for most areas (e.g., topic and geographic) involved. Therefore, a protocol for collecting the minimal viable product of face images was set up.
-The goals were to set the protocol around cheap/attainable gear with minimal requirements for its transport, setting up, and operation.
-
-The goal was to use this setup if you don't know what to do. It is also good so you can compare your results and add to the existing Manyfaces database—better large-scale, multi-cultural science.
+To set face perception and recognition Big Team Science in motion and enable conducting multi-site studies, a set of stimuli suitable for most areas (e.g., in terms of research question, geographic location) is needed. Therefore, we developed a protocol for collecting a database of face images. We developed the protocol with maximum usability in mind, not only making it transparent and readable to non-experts, but also creating it for use with attainable (vs. highly specialized and expensive) equipment, with minimal setup requirements, and without expert photography knowledge. Note that the protocol is for in-lab image collection to minimize sources of noise, to enable the collection of models' self-report data, and to ensure the consensual use of models' images (vs. scraping images from online). <!--maybe worth adding a section to the intro about the value of lab-based images vs ambient images &/or artificial faces? other recent database paper have discussed this, could also point to them-->
 
 ### Method
 
@@ -165,7 +143,7 @@ Researchers with additional time could also capture the other expressions at dif
 
 ##### Equipment
 
-All collaborating sites/labs used the same set of equipment. [** *note the 2 US labs used their own equipment - check whether exact same or comparable*] Images were captured using a Canon EOS 250d (also called Canon EOS Rebel SL3 in some regions) camera with Canon 18-55mm IS STM lens, and lit by an LED Ring light (Fovitec Bi-Colour LED 18” Ring Light) on a stand. Colour calibration was via a Calibrite colourChecker Classic card. The image collection space had a white background with a chair for models to sit in. Researchers provided white t-shirts for models to wear for standardised images.
+All collaborating sites/labs used the same set of equipment. <!--note the 2 US labs used their own equipment - check whether exact same or comparable--> Images were captured using a Canon EOS 250d (also called Canon EOS Rebel SL3 in some regions) camera with Canon 18-55mm IS STM lens, and lit by an LED Ring light (Fovitec Bi-Colour LED 18” Ring Light) on a stand. Colour calibration was via a Calibrite colourChecker Classic card. The image collection space had a white background with a chair for models to sit in. Researchers provided white t-shirts for models to wear for standardised images.
 
 ##### Setup
 
@@ -614,35 +592,29 @@ Compare emotion intensity ratings across expression type (i.e., to show that hap
 
 ## Discussion
 
-### The Value of the Current Work
-This work provides proof of concept that various labs, all following the same protocol and using the same equipment, can take comparable images to form a coherent face database. This broadens opportunities for future image database collection - a database does not need to all be collected by one lab in one location.
+### The value of the current work
+This work provides proof of concept that various labs, all following the same protocol and using the same equipment, can take comparable images to form a coherent face database. This broadens opportunities for future image database collection: A database does not need to all be collected by one lab in one location.
 
-The value of the database:
-* diversity in terms of nationality, ethnicity
-* reproducibility
-* non-static nature (others can follow the protocol & add to it)
+The database itself provides a uniquely diverse face image stimulus set in terms of model nationality and image variety (appearance standardization, viewing angle, and facial expression). It accomplishes this while being transparent and reproducible via the openly-available protocol. Additionally, the database will not remain static: Other researchers can follow the protocol and add to the database, further increasing its sample size and diversity.
 
-Rating data provide information about the minimum number of raters needed for reliable mean ratings for different judgments (tie to Hehman et al 2025)
+The data associated with the images are also valuable. First, we collected models' self-reported demographic information, which is useful for various kinds of research questions. The validation/norming data we collected also provide a useful starting point for researchers interested in using the images. <!-- include? Rating data provide information about the minimum number of raters needed for reliable mean ratings for different judgments (tie to Hehman et al 2025)-->
 
 ### Reflections on the Process
-Team feedback survey responses (Vít needs to check)
+Team feedback survey responses [Vít to add] <!--Vít to add-->
 
-Our own reflections on this project:
-* timelines stretch, the more people are involved
-* coordination/communication & momentum can be difficult to maintain
-* having lots of areas of expertise was useful in developing the database & in troubleshooting issues
-* having a collaboration agreement outlining expectations was helpful
+The leadership team found that having a broad variety of areas of expertise and diverse research backgrounds within the broader team was invaluable in both developing the database and in troubleshooting issues. We also found that setting out expectations at the start of the project through a collaboration agreement was essential. We also ran into various issues throughout the process, which are common to Big Team Science initiatives. For example, with so many labs and individual researchers involved, timelines for completion necessarily stretched. This made momentum difficult to maintain at times. Planning in generous buffer time for such large-scale projects and managing team members' expectations around timelines is therefore essential. We also faced difficulty in finding an optimal way to communicate effectively with all team members, given varying preferences (e.g., via email vs. other team communication platforms). It is perhaps worth surveying members of a big team at project start about communication possibilities, as well as outlining more specific communication expectations in a collaboration agreement.
 
-Explaining certain methods choices & what others might want to do in the future (e.g., in image processing, alignment, image size and face location driven by cropping needs - fix in future)
+Certain methodological choices in the current work ...<!--Lisa to add-->
+* Explaining certain methods choices & what others might want to do in the future 
+* e.g., in image processing, alignment; image size and face location driven by cropping needs - fix in future 
 
 
 ### Limitations
-The problem of emotion - the emotion validation suggests that people are bad at either making or perceiving emotions - this is a very difficult thing and might be beyond the capacity of a project like this to gather good emotion images. 
+The emotion validation data suggest that either models struggled to pose the facial expressions of emotion following our simple elicitation instructions, or that perceivers have difficulty in identifying emotions from posed facial expressions. In support of the former idea, models did self-report difficulty with the facial expression posing. In support of the latter idea, recent research shows emotion perception to be more accurate for spontaneous than posed expressions (<!--Amy Dawel's recent work, if i remember correctly?-->). <!--cite discussions within emotion literature about value of posed expressions, or best ways to elicit expressions-->This is a consideration for future research and possible updates to the protocol. 
 
-211 models, but max number of 205 images of each kind (thus missing perceived age/ethnicity for 6 models who had unstd but not std neutral images available)
+Other protocol limitations & future improvements? [Vít to add] <!--Vít to add-->
 
-Protocol limitations & future improvements
-
+We collected images of 211 models, but no single image type included images of all models. Rather, the maximum number of models represented in a single image type was 205 images (standardized neutral, front-facing). This led to missing perceived age/ethnicity data for size models who had unstandardized but not standardized neutral images available.
 
 ### Conclusion
 Here, we introduce a new diverse face image database, which will be useful to researchers interested in a variety of questions related to social perception, person recognition, and vision science. We demonstrate that a cohesive database can be compiled across a variety of sites, opening doors for future additions to this database and the development of future multi-lab databases.
