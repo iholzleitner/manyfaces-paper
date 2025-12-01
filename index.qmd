@@ -37,6 +37,7 @@ bibliography: references.bib
 ---
 
 <!-- to add rest of team as authors w/ CRediT -->
+<!-- to add reference list & linked citations -->
 
 
 ```{r}
@@ -67,58 +68,63 @@ theme_set(theme_bw(base_size = 14))
 
 ## Introduction
 
-Faces are rich sources of information and play a key role in human social perception, strongly drawing attention, informing social inferences, and serving as a primary means of person recognition (e.g., Zebrowitz, 2010; <!--add refs, including recognition sources-->). Various subfields within psychology—including vision science, person perception, social cognition, affective science, and person recognition<!--others?-->—address research questions involving faces and necessitating the use of face images as stimuli. Here, we introduce a novel face image database for research use. This database addresses various limitations of extant available databases and crucially takes a transparent approach, to align with Open Science best practice.
+Faces are rich sources of information, playing a key role in human social perception. They strongly draw attention, serving as a primary means of person recognition and informing social inferences (e.g., Young & Burton, 2017; Zebrowitz, 2010<!--others?-->). Various subfields within psychology—including vision science, person perception, social cognition, affective science, behavioural science, and person recognition—address research questions involving faces and thus necessitate the use of face images as stimuli. Here, we introduce a novel face image database for research use. This database was collected as part of an international multi-lab collaboration and addresses various limitations of existing databases. Crucially, we take a transparent approach aligned with Open Science best practices and make openly available the reproducible protocol we followed to collect the images, enabling future expansion of the database.
 
 ### Existing face databases
 
-A wealth of face stimulus databases exist, created for varying purposes. Many of these are available for research use (see e.g., Workman & Chatterjee 2021 face image meta-database to search many of these<!--cite-->). Researchers therefore have access to a broad variety of existing databases, well-suited to address questions in each subfield. For example, there exist many different databases in which photographed individuals (targets or models) display difference facial expressions of emotion (of use to affective scientists), appear in multiple photos varying in their lighting or angle (useful to person recognition researchers), or belong to various age or racial/ethnic groups (helpful to person perception researchers). However, many studies use the same stimulus databases, which introduces possible problems. For example, 4107 <!--update number before submission-->published papers cite the Karolinska Directed Emotional Faces (Lundquist et al., 1998<!--add ref-->), 2461<!--update number--> cite the Chicago Face Database (Ma et al. <!--add ref-->), and 675 <!--update number-->the Amsterdam Dynamic Facial Expression Set (van der Schalk et al., 2011 <!--add ref-->)<!--other examples to highlight?-->. This frequent use of the same sets of stimuli can cause issues in terms of generalizability if various research questions are tested on only a limited sample of face images. Participants, especially those participating online, may also become familiar with frequently-used stimuli, potentially introducing biases to their responses. 
+A wealth of face stimulus databases exists, created for various purposes. Many of these are available (see e.g., Workman & Chatterjee 2021 face image meta-database to search many of these) for research purposes allowing access to a broad variety of face stimuli, well-suited to address questions in a given subfield. For example, there are many different databases in which photographed individuals (referred to as targets or models) display different facial expressions of emotion (e.g., Ebner et al., 2010; van der Schalk et al., 2011; of use in affective science), appear in varying lighting and angles (e.g., Burton et al., 2010; Gao et al. 2008; useful for person recognition research), or belong to various age or racial/ethnic groups (for perception researcher). However, many studies tend to rely on a small number of those stimulus databases, which introduces potential problems. For example, 4107 published papers cite the Karolinska Directed Emotional Faces (Lundquist et al., 1998), 4375 cite the NimStim Set of Facial Expressions (Tottenham et al., 2009), 2461 cite the Chicago Face Database (Ma et al.), and 3219 the Radboud Faces Database (Langner et al., 2010). This frequent (over)use of the same sets of stimuli can compromise generalizability when various research questions are tested on only a limited sample of face images (DeBruine et al., 2022; Yarkoni, 2022). Participants, especially those participating online, may also become familiar with frequently used stimuli, potentially introducing biases to their responses. 
 
-Of course, not all research involving face images uses stimuli from published databases. Other studies use stimuli collected by the researchers themselves but which they may not be able to share with the research community (e.g., due to ethical limitations). Although this circumvents the issues noted above for frequently-used databases, this introduces its own problems. Chiefly, face images collected by researchers for their own research use are often not well-documented. Although the resulting images may be described and/or illustrated with an example, the process of image collection is rarely described in detail. This is often the case for even those databases that are available for other researchers to use. This lack of documentation limits transparency and can create problems for replication attempts (for example, another researcher attempting to replicate a finding using new face images collected themselves, rather than the images collected by the original researchers; see Třebický et al. 2024 Grim Image preprint <!--add ref-->). 
+Of course, not all research involving face images uses stimuli from published databases. It is a common for researchers to purposefully collect images themselves. But these stimulus sets are seldom openly shared (e.g., due to ethical limitations). Although this circumvents the issues with frequently-used databases, it introduces its own set of problems. Chiefly, face images collected by researchers for their own research use are often insufficiently documented. Although the resulting images may be described and/or illustrated with an example, the process of image collection is rarely described in adequate detail. This is often the case for even those databases openly available for research use. This lack of image acquisition (and processing) methods documentation limits transparency, replication attempts (for example, another researcher attempting to replicate a finding using new face images collected themselves, rather than the images collected by the original researchers; see Třebický et al. 2024) and ultimately comparisons of  results. 
 
-There are also limitations in terms of many databases’ (both those publicly available and those not) diversity of stimuli. For example, many include images of only White or Western targets/models (e.g., see Cook & Over 2021 <!--add ref-->). This reinforces the centering of Whitness and Western culture in psychological research, importantly limiting the ecological validity and generalizability of conclusions. Recent databases have sought to address this, specifically collecting images of multiracial and non-Western samples, for example (e.g., Chen et al., 2020; Meyers et al., 2024; Trzewik et al., 2025<!--add refs-->), but more such work is needed to further diversify the pool of available face research stimuli. Many world regions remain underrepresented <!--note examples?-->. This may be due, in part, to resource limitations: Equipment and setups for collecting images suitable for research use can be expensive and complex, making database collection not feasible for everyone and everywhere, thus limiting database diversity. Furthermore, to date, no extant database contains images of individuals from *multiple* world regions<!--verify-->.
+In many databases (both publicly available and not), there are also limitations in the diversity of stimuli. For example, many include images of only White or Western targets/models (e.g., see Cook & Over 2021). This reinforces the centering of Whiteness and Western culture in psychological research, importantly limiting the ecological validity and generalizability of conclusions (see also Henrich et al., 2010). Recently created databases have sought to address this, specifically collecting images of multiracial/multi-ethnic and non-Western samples, for example (e.g., Chen et al., 2020; Meyers et al., 2024; Saribay et al., 2018; Trzewik et al., 2025), but more such work is needed to further diversify the pool of available face research stimuli. Many world regions remain underrepresented . This may be due, in part, to resource limitations: Equipment and setups for collecting images suitable for research use can be prohibitively expensive and complex, making database collection not feasible for everyone and everywhere, thereby limiting database diversity. Additionally, researchers with the necessary equipment may be limited in terms of the diversity of their available participant sample. Furthermore, to date, no extant database contains images of individuals from *multiple* world regions. 
 
-A final limitation to extant face image databases is their largely static nature. That is, once collected, the number of stimuli available does not change. There are some exceptions to this, with multiple waves of additions to the Chicago Face Database (Ma et al<!--add ref-->), for example. Continued additions to databases are not the norm, however. This not only constrains the number of stimuli in any given database, increasing the likelihood of the frequent reuse of any individual stimulus (with the associated issues of this discussed above), but can also render some databases obsolete after some time (e.g., due to very dated model appearance/styling).
+A final limitation of extant face image databases is their largely static state. That is, once collected, the number of stimuli available does not change. There are some exceptions to this, such as multiple waves of additions to the Chicago Face Database (Lakshmi et al., 2021; Ma et al., 2021). Continued additions to databases are not the norm, however. This not only constrains the number of stimuli in any given database, increasing the likelihood of the frequent reuse of any individual stimulus, but can also render some databases obsolete over time (e.g., due to very dated model appearance/styling).
+
 
 ### Open Science considerations
 
-Open and transparent methods are essential for fully understanding, evaluating, and replicating research. Although methods reporting has become more open and accessible with researchers sharing materials such as questionnaire wording, stimuli, and programming scripts, the reporting of face image database collection procedures often lacks crucial details for full transparency and reproducibility—even among recent databases. This matters, because differences in details such as focal length can importantly affect faces' appearance, subsequently impacting perceptions of them (Třebický et al. 2016; see Třebický et al. 2024 Grim Image preprint for further discussion <!--add refs-->).
+Open and transparent methods are essential for fully understanding, evaluating, and replicating research. Although methods reporting has become more open and accessible with researchers sharing materials such as questionnaire wording, stimuli, and programming scripts, the reporting of face image database collection procedures often lacks crucial details for full transparency and reproducibility. This matters because differences in details such as focal length, for example, can importantly affect faces' appearance, subsequently impacting perceptions of them (e.g., Třebický et al. 2016; see Třebický et al. 2024 for further discussion).
 
-Big Team Science endeavors and large-scale collaborations are another vital part of improving science. Within psychology, multiple such initiatives have importantly contributed to addressing a variety of research questions, improving diversity and generalizability in the field (e.g., in the domain of face perception, Psychological Science Accelerator project Jones et al. 2021 <!--add ref-->). Such an approach has yet to be applied to stimulus database collection, but represents an opportunity to address many of the limitations of face image databases.
+Big Team Science (i.e., multi-lab) endeavours and large-scale collaborations are now recognized as a vital part of improving science. Within psychology, multiple such initiatives have importantly contributed to addressing a variety of research questions, improving diversity and generalizability in the field (e.g., in the domain of face perception, Jones et al.’s 2021 Psychological Science Accelerator project). Such an approach has yet to be applied to stimulus database collection, but it represents an opportunity to address many of the limitations of face image databases raised.
+
 
 ### The current work
 
 Here, we sought to address the limitations of existing face image databases through a Big Team Science approach. This served as the first project of ManyFaces, an international consortium of face perception and recognition researchers formed in 2022.
 
-To address issues of transparency and reproducibility, we developed a reproducible and openly-available protocol for face image collection. The protocol covers collecting multiple images (varying in standardization, viewing angle, and facial expression) of each target/model to benefit a wide array of possible research areas and questions related to face perception and recognition. We then collected images following this protocol in 20 different labs across the world, spanning 11 countries and five world regions (Europe, Latin America, North America, the Middle East, and Southeast Asia). <!--compare to existing databases?--> This resulted in a diverse set of models and images, more so than would be possible to collect in just one lab. This database is moreover not static, but can be added to in the future by any interested researcher following the protocol. We next validated the database by recruiting online perceivers to rate a subset of the images (i.e., front-facing images) to generate norming data for key social trait perceptions and emotion recognition. We make the image database and norming available for future research
+To address transparency and reproducibility issues, we developed an openly available, reproducible protocol for face image collection. The protocol covers collecting multiple images (varying in standardization, viewing angle, and facial expression) of each target/model to benefit a wide array of possible research areas and questions related to face perception and recognition. Following this protocol, we collected images (Phase 1) in 20 different labs across the world, spanning 11 countries and five world regions (Europe, Latin America, North America, the Middle East, and Southeast Asia). This resulted in a diverse set of models and images, more than would be possible to collect in or by a single lab. Moreover, this database is not static but can be added to in the future by any interested researcher following the protocol. We also validated the database (Phase 2) by recruiting online perceivers to rate a subset of the images (i.e., front-facing images) to generate norming data for key social trait perceptions and emotion recognition. We make this image database and norming data available for future research.
 
-Altogether, we introduce a new, diverse, openly-available face stimulus set that will continue to grow in the future. We hope that this will broaden the generalizability of findings in face perception and recognition research.
+Altogether, we introduce a new, diverse, openly-available face stimulus set that cancontinue to grow in the future. We believe that this effort will broaden the generalizability of findings in face perception and recognition research.
 
 
 ## Study/phase 1: Protocol development & stimulus collection
 
-To set face perception and recognition Big Team Science in motion and enable conducting multi-site studies, a set of stimuli suitable for most areas (e.g., in terms of research question, geographic location) is needed. Therefore, we developed a protocol for collecting a database of face images. We developed the protocol with maximum usability in mind, not only making it transparent and readable to non-experts, but also creating it for use with attainable (vs. highly specialized and expensive) equipment, with minimal setup requirements, and without expert photography knowledge. Note that the protocol is for in-lab image collection to minimize sources of noise, to enable the collection of models' self-report data, and to ensure the consensual use of models' images (vs. scraping images from online). <!--maybe worth adding a section to the intro about the value of lab-based images vs ambient images &/or artificial faces? other recent database paper have discussed this, could also point to them-->
+To set face perception and recognition Big Team Science in motion and enable conducting multi-site studies, a set of stimuli suitable for most areas (e.g., in terms of research question, geographic location) is needed. Therefore, we developed a protocol allowing us to collect such a database of face images. We developed the protocol with maximum usability and accessibility in mind, making it transparent and readable to non-experts, and designed for use with attainable (vs. highly specialized and expensive) equipment, with minimal setup requirements, and without requiring expertise in photography. Note that the protocol is for in-lab image collection to minimize external noise, to enable the collection of models' self-report data, and to ensure the consensual use of models' images (vs. scraping images from online sources or generating them). Photographing faces in a controlled lab environment thus strikes a balance in terms of ecological validity and ethical concerns (see Trzewik et al., 2025, for discussion of the value of lab-photographed vs. artificially generated and ambient face images). 
+
 
 ### Method
 
 For both studies/phases, the University of Glasgow provided ethical approval. We obtained additional local ethical approval at collaborating institutions where required.
 
+
 #### Protocol Development 
 
-The team developed and pre-tested a protocol for collecting standardized and reproducible images  of faces for use in research. Following a survey among the ManyFaces team, we constructed the protocol for collection of a variety of images that would be useful for a broad variety of research questions. Specifically, we included images varying in their standardization of appearance (standardized and unstandardized, e.g., white t-shirt and hair pulled back vs. clothing and hair as worn by the participant/model on that day), viewing angle (frontal, profile, ¾), and facial expression (neutral, natural, angry, disgusted, fearful, happy, sad, surprised).  
+The team curated a set of equipment and developed a protocol for collecting standardized, reproducible images of faces for research. Following a survey among the ManyFaces members, we constructed the protocol for the collection of a variety of images that would be useful for a broad variety of research questions. Specifically, we included images varying in their standardization of appearance (standardized and unstandardized, e.g., white t-shirt and hair pulled back vs. clothing and hair as worn by the participant/model on that day), viewing angle (frontal, profile, ¾), and facial expression (neutral, natural, angry, disgusted, fearful, happy, sad, surprised).
 
-Prior to beginning data collection, the team pre-tested the protocol to ensure clarity of instructions and consistency of images collected across sites. We revised details within the protocol to resolve issues that arose (e.g., revised facial expression elicitation instructions, clarified camera settings). The final protocol can be found at [https://docs.google.com/document/d/1D9TPGXCgTRZi7nqEIg6jb42R4gNQx9L3qasg8tFvu1I/edit?usp=sharing]. In sum, the protocol detailed the following:
+Prior to beginning data collection, the ManyFaces team pre-tested the protocol to ensure clarity of instructions and consistency of images collected across sites. We revised the protocol to address issues that arose (e.g., revised facial expression elicitation instructions, clarified camera settings). The final protocol can be found at [https://docs.google.com/document/d/1D9TPGXCgTRZi7nqEIg6jb42R4gNQx9L3qasg8tFvu1I/edit?usp=sharing<!--to add to OSF-->] (note that this is a living document that may be updated in future). In sum, the protocol detailed the following:
+
 
 ##### Image Types. 
 
 The protocol defined the categories of images in terms of their standardisation of appearance, viewing angle, and facial expression.
 
-* Standardisation of Appearance. In the *standardised* images models wore a white t-shirt, had their hair pulled back or covered, included no adornments/accessories (excepting those that could not be removed for cultural reasons), and wore minimal or no makeup. In contrast, *unstandardised* images showed models in their own clothing, with their hair as they came into the lab, and with adornments excepting glasses or anything obscuring the face or neck.  
+* Standardisation of Appearance. In the *standardised* images, models wore a white crew neck t-shirt, had their hair pulled back or covered, included no adornments/accessories (excepting those that could not be removed for cultural reasons), and wore minimal or no makeup (models were informed about this beforehand). In contrast, *unstandardised* images showed models in their own clothing, with their hair as they came into the lab, and with adornments, except for glasses or anything that obscured the face or neck.  
 * Viewing Angle. *Full frontal portraits* showed models facing the camera, *left and right profile portraits* showed each side of models’ faces in profile, and *left and right ¾ portraits* showed models’ faces at a 45-degree angle from the axis of the camera.  
 * Facial Expression. *Neutral* images were of models refraining from making any facial expression, *natural* images displayed a natural expression for the model, and each facial expression of emotion displayed the expression the model would make if they were feeling the specified emotion (e.g., happiness).
 
 ##### Image Prioritisation
 
-The protocol specified which images to take (i.e., the combinations of appearance standardisation, viewing angle, and emotion expression), in what order, and which were most crucial to collect if researchers were under time constraints. The order of image collection was as follows, with starred (*) images prioritised/required for each model:
+The protocol specified which images to take (i.e., the combinations of appearance standardisation, viewing angle, and facial expression), in what order, and which were most crucial to collect (as voted by the ManyFaces members) if researchers were under time constraints. The order of image collection was as follows, with starred (*) images prioritised/required for each model:
 
 * Exposure calibration photo*
 * Identification & calibration photo*
@@ -129,7 +135,7 @@ The protocol specified which images to take (i.e., the combinations of appearanc
 * Unstandardized - Happy - Full frontal portrait*
 * Unstandardized - Happy - Left and Right profile portraits
 * Unstandardized - Happy - Left and Right ¾ portraits
-* Unstandardized - All other expressions (in random or appropriate order)  - Full frontal portrait
+* Unstandardized - All other expressions (in random or appropriate order) - Full frontal portrait
 * Standardized - Natural - Full frontal portrait
 * Standardized - Neutral - Full frontal portrait*
 * Standardized - Neutral - Left and Right profile portraits*
@@ -139,15 +145,16 @@ The protocol specified which images to take (i.e., the combinations of appearanc
 * Standardized - Happy - Left and Right ¾ portraits
 * Standardized - All other expressions (in random or appropriate order) - Full frontal portrait
 
-Researchers with additional time could also capture the other expressions at different viewing angles (Left/Right profile, ¾)  with either unstandardized or standardized appearance, as well as a video of standardized appearance to test out 3D image capture.
+Researchers with additional time could also capture the other expressions at different viewing angles (Left/Right profile, ¾) with either unstandardized or standardized appearance, as well as a video of standardized appearance to test out 3D image capture.
+
 
 ##### Equipment
 
-All collaborating sites/labs used the same set of equipment. <!--note the 2 US labs used their own equipment - check whether exact same or comparable--> Images were captured using a Canon EOS 250d (also called Canon EOS Rebel SL3 in some regions) camera with Canon 18-55mm IS STM lens, and lit by an LED Ring light (Fovitec Bi-Colour LED 18” Ring Light) on a stand. Colour calibration was via a Calibrite colourChecker Classic card. The image collection space had a white background with a chair for models to sit in. Researchers provided white t-shirts for models to wear for standardised images.
+All collaborating sites/labs used the same set of equipment. <!--note the 2 US labs used their own equipment - check whether exact same or comparable--> Images were captured using a Canon EOS 250d (also called Canon EOS Rebel SL3 in some regions) camera with a kit lens (Canon 18-55mm IS STM lens), and lit by an LED Ring light (Fovitec Bi-Colour LED 18” Ring Light) on a stand. For colour calibration, Calibrite ColourChecker Classic card was used. The image collection spaces were to have a white background with a chair for models to sit in. Researchers provided white t-shirts for models to wear for standardised images.
 
 ##### Setup
 
-The setup of the room used for image collection at each site required removing or minimising outside light sources (e.g., using a windowless room, turning off overhead lights) and colour spill. The protocol specified the distances at which to set up the chair for models to sit in relative to the white background and the lighting and camera rig. Camera setup instructions including the specified shooting mode, shutter speed, aperture, ISO, white balance, and colour space.
+The setup of the room used for image collection at each site required removing or minimising external light sources (e.g., using a windowless room, window blinds, turning off overhead lights) and colour spill. The protocol specified the distances at which to set up the chair for models to sit in relative to the white background and the lighting and camera rig. Camera setup instructions, including the specified shooting and focusing modes, shutter speed, aperture, ISO, white balance, colour space, and file type.
 
 ##### Procedure
 
@@ -165,7 +172,7 @@ mean_mps <- mean(models_per_site) |> round(1)
 
 Following the protocol, `r lab_n` labs (1 in Austria, 2 in Brazil, 2 in Canada, 2 in Germany, 1 in Israel, 3 in Malaysia, 1 in Mexico, 1 in the Netherlands, 1 in Serbia, 4 in the UK, and 2 in the US) collected images of an average of `r mean_mps` models per site. As specified by the protocol, researchers collected multiple images of each model, within the time constraints of the study session.
 
-Models furthermore completed a demographic questionnaire <!-- PDF is here, add to OSF: https://drive.google.com/file/d/1EkX4jCkwpFb-Cwi9yWge_JrNbus5re6W/view*--> via Experimentum, reporting their age, gender, ethnicity, height, and weight. They also reported whether or not they were wearing makeup (specifying what kinds, e.g., foundation, eye makeup, semi-permanent makeup) and whether they had ever experienced anything that could affect the shape of their face (e.g., broken nose, cosmetic surgery or injections, orthodontic work) and specified this if they were willing. Finally, they completed a debriefing questionnaire <!-- PDF is here, add to OSF: https://drive.google.com/file/d/1XFlAdcMZAEcC1NGIJeaOHbx3BYPwzYqn/view*--> asking them about their experience of posing for the images (e.g., whether instructions were clear, whether any part of the process was uncomfortable).
+Models furthermore completed a demographic questionnaire [LINK] <!-- PDF is here, add to OSF: https://drive.google.com/file/d/1EkX4jCkwpFb-Cwi9yWge_JrNbus5re6W/view*--> Experimentum, reporting their age, gender, ethnicity, height, and weight. They also reported whether or not they were wearing makeup (specifying what kinds, e.g., foundation, eye makeup, semi-permanent makeup) and whether they had ever experienced anything that could affect the shape of their face (e.g., broken nose, cosmetic surgery or injections, orthodontic work) and specified this if they were willing. Finally, they completed a debriefing questionnaire [LINK] <!-- PDF is here, add to OSF: https://drive.google.com/file/d/1XFlAdcMZAEcC1NGIJeaOHbx3BYPwzYqn/view*--> asking them about their experience of posing for the images (e.g., whether instructions were clear, whether any part of the process was uncomfortable).
 
 ### Results
 
@@ -209,7 +216,7 @@ ggplot()
 ```
 
 #### Model Demographics
-For data cleaning, we first downloaded and reshaped the raw data from Experimentum. In the next step, we ensured that the models’ gender, race/ethnicity, and units of height and weight were consistently formatted across labs. For gender and race/ethnicity, words presented in languages other than English were recoded to be presented in English (e.g., “mulher” to “female”, “preta” to “Black”). We then classified self-described race/ethnicity into one of seven categories (“White”, “Black”, “Asian”, “Indigenous”, “MENA” (Middle Eastern or North African), “Latine”, or “Mixed”), where possible. Descriptions that could not be clearly sorted into these categories were given “Ambiguous label” (non-entries were recoded as NA). For height, we ensured all data were presented in centimetres, and for weight, we ensured that all data were presented in kilograms. Models could report height and weight in metric or imperial units, so we converted from imperial to metric where required. We also sanity-checked the reported units, assuming heights > 100 to be in centimetres and those < 100 to be in inches, and weights < 80 to be in kilograms. Any non-entries of height or weight for a model was recoded as NA.
+For data cleaning, we first downloaded and reshaped the raw data from Experimentum. In the next step, we ensured that the models’ gender, race/ethnicity, and units of height and weight were consistently formatted across labs. For gender and race/ethnicity, words presented in languages other than English were recoded to be presented in English (e.g., “mulher” to “female”, “preta” to “Black”). We then classified self-described race/ethnicity into one of seven categories (“White”, “Black”, “Asian”, “Indigenous”, “MENA” (Middle Eastern or North African), “Latine”, or “Mixed”), where possible. Descriptions that could not be clearly sorted into these categories were given “Ambiguous label” (non-entries were recoded as NA). For height, we ensured all data were presented in centimeters, and for weight, we ensured that all data were presented in kilograms. Models could report height and weight in metric or imperial units, so we converted from imperial to metric where required. We also sanity-checked the reported units, assuming heights > 100 to be in centimeters and those < 100 to be in inches, and weights < 80 to be in kilograms. Any non-entries of height or weight for a model was recoded as NA .
 
 ```{r}
 #| label: tbl-model-demog
@@ -221,23 +228,25 @@ data.frame(a = 1:5)
 
 ## Study/phase 2: Validation/norming data
 
-We next obtained perceptions/ratings of a subset of the photos (front-facing) to validate the emotion expressions (their perceived emotion category and intensity) and collect norming data on central social perceptions, namely perceived attractiveness, dominance, trustworthiness, gender-typicality, memorability, and age. We chose these ratings due to their central importance in the person perception, face recognition, and emotion perception literatures (e.g., Oosterhof & Todorov, 2008; Sutherland et al., 2013; Perrett, 2010; <!--add emotion & memorability/recognition cites-->). We preregistered this study on the OSF (<https://osf.io/4d5v9>).
+We next obtained perceptions/ratings of a subset of the photos (front-facing) to validate the emotion expressions (their perceived emotion category and intensity) and collect norming data on central social perceptions, namely perceived attractiveness, dominance, trustworthiness, gender-typicality, memorability, and age. We chose these ratings due to their central importance in the person perception, face recognition, and emotion perception literatures (e.g., Oosterhof & Todorov, 2008; Sutherland et al., 2013; Perrett, 2017; <!--add emotion & memorability/recognition cites-->). We preregistered this study on the OSF (<https://osf.io/4d5v9>).
 
 ### Method
 
 #### Image Processing
+<!--move this section to phase 1?-->
 
 RAW images were processed using webmorphR (<https://doi.org/10.31234/osf.io/j2754>), which facilitates scriptable processing of images using imagemagick (<https://imagemagick.org>); a full script of the processing steps is available at [REPO <!--add link-->]. Briefly, 
 
 * Each face was delineated using the Face++ automatic face detection algorithm (see <https://www.faceplusplus.com/>) to generate a 106-point template.
 * All images were resized to 1000w by 1500h pixels to standardise size (two different RAW formats were used, which resulted in two different image sizes)
-* The median RGB colour value of a 100x100 pixel patch at the upper left corner was calculated to fill in any edges from alignment.
+* The median RGB colour value of a 100×100 pixel patch at the upper left corner was calculated to fill in any edges from alignment.
 * The image was repositioned and cropped (not rotated or resized) such that
-    * The image size was 675w by 900h 
+    * The image size was 675w by 900h pixel
     * point 71 (between the eyes) was relocated to position [.5w, .4h]
 * This aligned image was saved as a lossless PNG using imagemagick default settings (e.g., sRGB colour space).
-* A white balance correction was applied to the resulting images, calculated from the mean RGB values in the 25x25 pixel top-right corner patch 
-* These images were converted to JPEGs with a quality setting of 75 to reduce file size for stimulus display online.
+* A white balance correction was applied to the resulting images, calculated from the mean RGB values in the 25x25 pixel top-right corner patch (white background) ^[We did not fully colour-calibrate the images here (see Discussion) but future researchers may wish to do so.] 
+* These images were converted to JPEGs with a quality setting of 75 to reduce file size for stimulus display online.  
+
 
 
 ```{r}
@@ -250,7 +259,7 @@ ggplot()
 
 #### Stimuli
 
-The number of stimuli was determined by the number of models recruited across the 20 research labs and how many models posed for each image type. The maximum number of targets per image type was 205 <!--add footnote stating prereg mis-stated total n of models to be 205 (actually 211) rather than max n of images-->, meaning each rater saw up to 205 stimuli. We obtained ratings of the front-facing standardised neutral (n = 205), unstandardised neutral (n = 188), standardised angry (n = 187), standardised disgusted (n = 184), standardised fearful (n = 175), standardised happy (n = 199), standardised sad (n = 183), and standardised surprised (n = 184).
+The number of stimuli was determined by the number of models recruited across the 20 research labs and how many models posed for each image type. The maximum number of targets per image type was 205^[The preregistration mis-stated the total number of models, rather than the maximum number of images, to be 205. The total number of models was 211], meaning each rater saw up to 205 stimuli. We obtained ratings of the front-facing standardised neutral (n = 205), unstandardised neutral (n = 188), standardised angry (n = 187), standardised disgusted (n = 184), standardised fearful (n = 175), standardised happy (n = 199), standardised sad (n = 183), and standardised surprised (n = 184).
 
 
 ```{r}
@@ -272,11 +281,11 @@ Additionally, we created stimuli for attention checks. These were white images w
 
 ###### Trait Ratings
 
-We obtained ratings of faces’ attractiveness, dominance, trustworthiness, memorability, and gender-typicality (‘How attractive [dominant, trustworthy, memorable, gender-typical] does this person look?’). Ratings were on scales ranging from 1 (*not at all*) to 7 (*very*)
+We obtained ratings of faces’ attractiveness, dominance, trustworthiness, memorability, and gender-typicality (‘How attractive [dominant, trustworthy, memorable, gender-typical] does this person look?’). Ratings were on scales ranging from 1 (*not at all*) to 7 (*very*).
 
 ###### Demographic Impressions
 
-We obtained ratings of faces’ perceived age (‘How old does this person look?’), with responses collected in 5-year ranges/brackets (i.e., 16-20, 21-25, …, 76-80, 81+).
+We obtained ratings of faces’ perceived age (‘How old does this person look?’), with responses collected in 5-year ranges/brackets (i.e., 16-20, 21-25, …, 76-80, 81+). 
 
 <!--still to add perceived race/ethnicity-->
 
@@ -284,7 +293,7 @@ We obtained ratings of faces’ perceived age (‘How old does this person look?
 
 ###### Trait Ratings
 
-We obtained ratings of faces’ attractiveness, dominance, and trustworthiness on scales ranging from 1 (*not at all*) to 7 (*very*)
+We obtained ratings of faces’ attractiveness, dominance, and trustworthiness on scales ranging from 1 (*not at all*) to 7 (*very*).
 
 ##### Standardised Emotional Faces
 
@@ -299,16 +308,17 @@ We obtained ratings of how intensely faces expressed each intended emotion (‘H
 
 #### Procedure
 
-We collected ratings via Experimentum (DeBruine et al., 2020); structure files for the exact experimental setup are available at [REPO] <!--add link-->. After a brief introduction to the study and online informed consent, each participant (rater) was randomly allocated to one of the ratings (e.g., rating all 205 standardised neutral faces on how memorable they look). All available faces were displayed one at a time, in a randomised order for each rater. The question/prompt and response scale remained visible at the top of the screen, above the photo throughout the study. The study automatically progressed to the next trial once the rater responded by clicking on the response scale. There was no time limit to provide a response. We included seven attention checks embedded in the study, which directed raters to provide a specific response.
+We collected ratings via Experimentum (DeBruine et al., 2020); structure files for the exact experimental setup are available at [REPO]<!--add link-->. After a brief introduction to the study and online informed consent, each participant (rater) was randomly allocated to one of the ratings (e.g., rating all 205 standardised neutral faces on how memorable they look). All available faces were displayed one at a time, in a randomised order for each rater. The question/prompt and response scale remained visible at the top of the screen, above the photo throughout the study. The study automatically progressed to the next trial once the rater responded by clicking on the response scale. There was no time limit to provide a response. We included seven attention checks embedded in the study, which directed raters to provide a specific response.
 
-Following rating or categorising all stimuli, raters self-reported their gender, age, race/ethnicity, country of residence, and device type used for the study (desktop, laptop, tablet, mobile) <!--add doc w/ exact wording to OSF-->. They also completed an honesty/attention check question, asking them if they engaged with the study seriously, with assurance of payment regardless of response (choosing from ‘no, I was not really paying attention’ and ‘yes, I tried to give my authentic first impressions’). 
+Following rating or categorising all stimuli, raters self-reported their gender, age, race/ethnicity, country of residence, and device type used for the study (desktop, laptop, tablet, mobile)<!--add doc to OSF-->. They also completed an honesty/attention check question, asking them if they engaged with the study seriously, with assurance of payment regardless of response (choosing from ‘no, I was not really paying attention’ and ‘yes, I tried to give my authentic first impressions’). 
+
 
 We recruited fluent English-speaking raters through Prolific <!--add prolific inclusion/exclusion criteria-->. We collected all data in May 2025.
 
 
 #### Participants
 
-We aimed to collect 100 raters per rating condition (to achieve stable averages and allow for exclusions; <!--add just-published Hehman et al 2025 cite-->, totalling 2100 raters. Altogether, 2115 raters completed the study. See Results for exclusions and demographics of the final sample.
+We aimed to collect 100 raters per rating condition (to achieve stable averages and allow for exclusions; Hehman et al., 2025), totalling 2100 raters. Altogether, 2115 raters completed the study. See Results for exclusions and demographics of the final sample.
 
 ### Results
 
@@ -319,6 +329,7 @@ In the raters’ demographic questionnaire, we standardized participants’ reco
 A total of 2115 raters completed 2158 rating or categorisation tasks. We found that some raters did not complete all trials in tasks, some raters completed more than one task, and some raters completed more than the maximum number of trials in a task (likely by restarting the study or bypassing the back button block). Therefore, we removed incomplete tasks from our data, retained raters’ first complete tasks, and filtered our duplicate trials by keeping only raters’ first ratings for a duplicated trial. After these exclusions, and before implementing the pre-registered plan for data exclusions, we had complete and clean data from 1936 raters.
  
 Our pre-registered plan for data exclusions included removing raters who gave overly consistent responses, committed overly fast responses, self-reported not taking the study seriously when asked whether or not they completed the study authentically, and failed attention checks. In total, we excluded 49 raters for our pre-registered reasons for data exclusions. @tbl-exclusions shows the number of raters we excluded for each of our reasons. 
+ 
 
 ```{r}
 #| label: tbl-exclusions
@@ -346,11 +357,11 @@ ggplot()
 data.frame(a = 1:5)
 ```
 
-Anonymous data are available on the OSF: [link] <!--[add OSF link]-->
+Anonymous data are available on the OSF: [LINK] <!--[add link-->
  
 #### Rater Demographics
 
-We collected the following demographic data from our raters (N = 1676 of 1899 provided data): Age, gender, residence, ethnicity, and devices on which the ratings were completed. See @fig-gender-age and Tables 3-5 for demographic information.
+We collected the following demographic data from our raters (N = 1676 of 1899<!--update N--> provided data): Age, gender, residence, ethnicity, and devices on which the ratings were completed. See @fig-gender-age and Tables 3-5 for demographic information.
 
 ```{r}
 #| label: fig-gender-age
@@ -391,7 +402,7 @@ data.frame(1:5)
 
 ##### Standardized Trait Ratings
 
-In the first step, we calculated intraclass correlations for traits observed across tasks for our standardized images. The number of raters ranged from 83 to 94 for these traits. The average reliability across raters was very good for rating attractiveness, dominance, trustworthiness, and gender-typicality, but poorer for rating memorability  (see @tbl-std-neu-agree).
+In the first step, we calculated intraclass correlations for traits observed across tasks for our standardized images. The number of raters ranged from 83 to 94 for these traits. The average reliability across raters was very good for rating attractiveness, dominance, trustworthiness, and gender-typicality, but poorer for rating memorability (see @tbl-std-neu-agree).
 
 ```{r}
 #| label: tbl-std-neu-agree
@@ -445,7 +456,7 @@ data.frame(1:5)
  
 #### Points of Stability
 
-To determine the number of raters required for stable ratings, we computed the point of stability (Hehman et al., 2018). This approach estimates the smallest sample size at which mean ratings stabilize by exceeding a cosine similarity threshold of 0.5 with the full-sample mean. As shown in Figures 4-6, the ratings to the standardized images reached stability between 37 and 45 raters, the ratings to the unstandardized images reached stability between 37 and 42 raters, and the ratings for the emotion intensities reached stability between 29 and 50 raters.
+To determine the number of raters required for stable ratings, we computed the point of stability (Hehman et al., 2025). This approach estimates the smallest sample size at which mean ratings stabilize by exceeding a cosine similarity threshold of 0.5 with the full-sample mean. As shown in Figures 4-6, the ratings to the standardized images reached stability between 37 and 45 raters, the ratings to the unstandardized images reached stability between 37 and 42 raters, and the ratings for the emotion intensities reached stability between 29 and 50 raters.
 
 ```{r}
 #| label: fig-std-neu-pos
@@ -593,28 +604,26 @@ Compare emotion intensity ratings across expression type (i.e., to show that hap
 ## Discussion
 
 ### The value of the current work
-This work provides proof of concept that various labs, all following the same protocol and using the same equipment, can take comparable images to form a coherent face database. This broadens opportunities for future image database collection: A database does not need to all be collected by one lab in one location.
 
-The database itself provides a uniquely diverse face image stimulus set in terms of model nationality and image variety (appearance standardization, viewing angle, and facial expression). It accomplishes this while being transparent and reproducible via the openly-available protocol. Additionally, the database will not remain static: Other researchers can follow the protocol and add to the database, further increasing its sample size and diversity.
+This database provides a uniquely diverse face image stimulus set in terms of model nationality and image variety (appearance standardization, viewing angle, and facial expression). The diversity of images within the database makes it potentially useful to address a variety of research questions in multiple subfields of psychology (e.g., face recognition, emotion). It accomplishes this while being transparent and reproducible via the openly available protocol. Additionally, the database need not remain static: Other researchers can follow the protocol and add to the database, further increasing its sample size and diversity. This protocol can also serve as a template for researchers interested in collecting stimulus images, in terms of highlighting the kinds of details that need to be considered and documented)
 
-The data associated with the images are also valuable. First, we collected models' self-reported demographic information, which is useful for various kinds of research questions. The validation/norming data we collected also provide a useful starting point for researchers interested in using the images. <!-- include? Rating data provide information about the minimum number of raters needed for reliable mean ratings for different judgments (tie to Hehman et al 2025)-->
+The data associated with the images are also valuable. First, we collected models' self-reported demographic information, which is useful for various kinds of research questions. The validation/norming data we collected also provide a useful starting point for researchers interested in using the images, for example enabling researchers to choose subsets of images most suited to address their research questions. These data also provide information about the minimum number of raters needed for reliable mean ratings for different judgments (see Hehman et al., 2025). 
 
-### Reflections on the Process
-Team feedback survey responses [Vít to add] <!--Vít to add-->
+This work also provides proof of concept that various labs, all following the same protocol and using the same equipment, can take comparable images to form a coherent face database. This broadens opportunities for future image database collection: A database does not need to all be collected by one lab in one location.
 
-The leadership team found that having a broad variety of areas of expertise and diverse research backgrounds within the broader team was invaluable in both developing the database and in troubleshooting issues. We also found that setting out expectations at the start of the project through a collaboration agreement was essential. We also ran into various issues throughout the process, which are common to Big Team Science initiatives. For example, with so many labs and individual researchers involved, timelines for completion necessarily stretched. This made momentum difficult to maintain at times. Planning in generous buffer time for such large-scale projects and managing team members' expectations around timelines is therefore essential. We also faced difficulty in finding an optimal way to communicate effectively with all team members, given varying preferences (e.g., via email vs. other team communication platforms). It is perhaps worth surveying members of a big team at project start about communication possibilities, as well as outlining more specific communication expectations in a collaboration agreement.
+### Reflections on the Process & Limitations
+The leadership team found that having a broad variety of areas of expertise and diverse research backgrounds within the broader team was invaluable in both developing the database and in troubleshooting issues. We moreover found that setting out expectations at the start of the project through a collaboration agreement was essential. However, we ran into various issues throughout the process, which are common to Big Team Science initiatives. For example, with so many labs and individual researchers involved, timelines for completion necessarily stretched. This made momentum difficult to maintain at times. Planning in generous buffer time for such large-scale projects and managing team members' expectations around timelines is therefore essential. We also faced difficulty in finding an optimal way to communicate effectively with all team members, given varying preferences (e.g., via email vs. other team communication platforms). It is perhaps worth surveying members of a big team at project start about communication possibilities, as well as outlining more specific communication expectations in a collaboration agreement. 
 
-Certain methodological choices in the current work ...<!--Lisa to add-->
-* Explaining certain methods choices & what others might want to do in the future 
-* e.g., in image processing, alignment; image size and face location driven by cropping needs - fix in future 
+After Phase 1, we surveyed the ManyFaces research team to provide feedback on the process of collecting images using the protocol. Team members commonly expressed the desire for additional concise guidance in following the protocol, including an additional abbreviated protocol with numbered steps to follow during data collection and a video tutorial (in addition to the provided illustrative images) showing the necessary steps for researchers unfamiliar with camera equipment. These are requests that we can incorporate into future protocol updates. Doing so could both make the process easier for researchers and minimize errors and deviations from the protocol, ensuring greater consistency between sites. 
 
+The major issue raised by the research team was the difficulty of eliciting facial expressions as described in the protocol. The protocol took a straightforward instructive approach to emotion elicitation (e.g., asking participants to face the camera with the expression they would make if they were feeling happy), following consultation with emotion experts in ManyFaces and discussion of feasibility with the wider team. However, models self-reported difficulty with the facial expression posing, in line with researchers’ feedback. The emotion validation data also indicate that models struggled to pose the facial expressions of emotion. The data furthermore suggest that perceivers had difficulty identifying emotions from these posed facial expressions. In support of this idea, recent research shows posed expressions to not appear genuine and reveals differing perceptions of posed and spontaneous expressions (Dawel et al., 2017, 2025). Future work, including possible updates to our own protocol, may therefore focus on developing a better framework to elicit facial expressions. This could include taking inspiration from databases of naturally-induced emotion (e.g., Miolla et al., 2023; Sneddon et al., 2011) and considering potential cultural differences and specific local needs.
 
-### Limitations
-The emotion validation data suggest that either models struggled to pose the facial expressions of emotion following our simple elicitation instructions, or that perceivers have difficulty in identifying emotions from posed facial expressions. In support of the former idea, models did self-report difficulty with the facial expression posing. In support of the latter idea, recent research shows emotion perception to be more accurate for spontaneous than posed expressions (<!--Amy Dawel's recent work, if i remember correctly?-->). <!--cite discussions within emotion literature about value of posed expressions, or best ways to elicit expressions-->This is a consideration for future research and possible updates to the protocol. 
+The research team also raised several comments about the provided and not-provided equipment, specifically the flimsiness of the light stand and the missing standardized backdrop (due to shipping constraints, participating researchers were to source a white background, e.g., a wall, seamless fabric, or paper). It is worth highlighting that the images were captured with equipment selected due to several practical constraints: budget, university-approved vendors, shipping logistics, interoperability, and ease of use for non-experts in varying conditions. The available project budget and administrative restrictions on approved vendors (their offerings and stock) for the University of Glasgow primarily limited the attainable camera, lens, and lighting setup. In general, we opted to create a setup that would not be prohibitively expensive to acquire, could be shipped in a single parcel, and would be compatible (substitutable) with equipment other researchers may have available. The last consideration was creating a setup with the fewest degrees of freedom, and thus less room for error. Therefore, we opted to use an LED ring light with a camera mounted inside the ring in landscape orientation on a single stand (vs. portrait orientation using a different kind of mount or separate stands for the camera and light). Ring lights became ubiquitous and easy to acquire in recent years; they only need to be positioned square, level, and in front of the sitter. Other, more complex setups can be created; however, the price, mobility, and repeatability of such setups may represent major constraints to consistent and reliable image collection. It is therefore worth considering trade-offs between different kinds of equipment and setups in future work.
 
-Other protocol limitations & future improvements? [Vít to add] <!--Vít to add-->
+In addition to our choices of equipment, we also made certain pragmatic choices during image processing that future work could improve on. For example, we white-balanced the images rather than fully colour-correcting them, as we were able to create a fully reproducible scripted method for the former process, but not the latter. This was due to limitations such as varied colour checker chart placement and orientation in models’ photos and a lack of expertise on the research team to work around this in a reproducible way. We therefore opted to simply white-balance to keep the process entirely open and reproducible, rather than fully colour-correct using a manual and not fully reproducible method. The process of aligning and sizing the images was also driven by cropping needs. That is, due to the landscape orientation of the photos, there was limited vertical space that we could crop, constraining the possibilities for face alignment and image size. Future work could consider using alternative equipment setups to enable capture images in portrait mode. Variation in faces’ size in the images, due to some deviations from the distances specified in the protocol, also affected the image processing steps. This could be addressed in future work by more clearly highlighting not only the key aspects of the protocol that should be kept constant, but also why these aspects should be constant (i.e., clarifying the reasoning to all team members). 
 
-We collected images of 211 models, but no single image type included images of all models. Rather, the maximum number of models represented in a single image type was 205 images (standardized neutral, front-facing). This led to missing perceived age/ethnicity data for size models who had unstandardized but not standardized neutral images available.
+Finally, we collected images of 211 models, but no single image type included images of all models. Rather, the maximum number of models represented in a single image type was 205 images (standardized neutral, front-facing). This led to missing perceived age/ethnicity data for six models who had unstandardized but not standardized neutral images available.
 
 ### Conclusion
 Here, we introduce a new diverse face image database, which will be useful to researchers interested in a variety of questions related to social perception, person recognition, and vision science. We demonstrate that a cohesive database can be compiled across a variety of sites, opening doors for future additions to this database and the development of future multi-lab databases.
+
