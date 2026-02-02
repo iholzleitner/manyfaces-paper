@@ -45,25 +45,63 @@ csl: apa.csl
 #| include: false
 
 library(tidyverse)
+library(flextable)
 #devtools::install_github("debruine/webmorphR@dev")
 library(webmorphR)
 
-# Rating data
-data_models <- read_csv("data/manyfaces-pilot-models_cleaned.csv",
-                     show_col_types = FALSE)
+theme_set(theme_bw(base_size = 14))
+```
 
-# Rating data
+
+```{r}
+# read in main data used
+
+# Model data
+ct <- cols(
+  age = col_integer(),
+  height = col_integer(),
+  weight = col_integer(),
+  ethnicity_rec = col_factor(levels = c("White", "Black", "Asian", "Indigenous", "MENA", "Latine", "Mixed", "Ambiguous label"), include_na = TRUE)
+)
+data_models <- read_csv("../data/manyfaces-pilot-models_cleaned.csv",
+                        col_types = ct)
+
+# Rating data (post exclusions)
+exp_levels <- c("attractive", 
+                "dominant", 
+                "trustworthy", 
+                "attractive (unstd)", 
+                "dominant (unstd)", 
+                "trustworthy (unstd)",
+                "memorable",
+                "gender-typical",
+                "age",
+                "anger",
+                "disgust", 
+                "fear", 
+                "happiness", 
+                "sadness", 
+                "surprise",
+                "emotion 1", 
+                "emotion 2", 
+                "emotion 3", 
+                "emotion 4", 
+                "emotion 5", 
+                "emotion 6"
+              )
+ct <- cols(
+  exp = col_factor(levels = exp_levels)
+)
 data_exp <- read_csv("data/manyfaces-pilot-exp_cleaned.csv",
-                     show_col_types = FALSE)
+                     col_types = ct)
 
-# Questionnaire data
+# Questionnaire data (post exclusions)
 data_qu <- read_csv("data/manyfaces-pilot-quest_cleaned.csv",
                     show_col_types = FALSE)
 
+# Exclusions
 data_excl <- read_csv("data/exclusions.csv",
                     show_col_types = FALSE)
-
-theme_set(theme_bw(base_size = 14))
 ```
 
 ## Introduction
@@ -197,7 +235,7 @@ emo_levels <- c(neu = "neutral",
                 sad = "sad", 
                 sur = "surprised")
 
-data_models |>
+image_type_n <- data_models |>
   select(model_id:unstd_neu) |>
   pivot_longer(std_ang:unstd_neu) |>
   filter(value == 1) |>
@@ -206,23 +244,71 @@ data_models |>
   pivot_wider(names_from = type, values_from = n) |>
   mutate(emotion = factor(emotion, names(emo_levels), emo_levels)) |>
   arrange(emotion)
+
+image_type_n |>
+  flextable()
 ```
 
 ```{r}
 #| label: fig-img-examples
 #| fig-cap: Example images of each level of standardisation, angle, and expression
+#| fig-alt: "A 7x6 grid of pictures of a woman in a white t-shirt with a white headband, showing different angles and expressions. Top labels: neutral, anger, disgust, fear, happy, sad, surprised. Side labels: standardised front, standardised left 90 (side profile), standardised left 45 (three-quarter profile), standardised right 45, standardised right 90, unstandardised front."
 
-ggplot()
+knitr::include_graphics("fig/img-examples.png")
 ```
 
+
 #### Model Demographics
-For data cleaning, we first downloaded and reshaped the raw data from Experimentum. In the next step, we ensured that the models’ gender, race/ethnicity, and units of height and weight were consistently formatted across labs. For gender and race/ethnicity, words presented in languages other than English were recoded to be presented in English (e.g., “mulher” to “female”, “preta” to “Black”). We then classified self-described race/ethnicity into one of seven categories (“White”, “Black”, “Asian”, “Indigenous”, “MENA” (Middle Eastern or North African), “Latine”, or “Mixed”), where possible. Descriptions that could not be clearly sorted into these categories were given “Ambiguous label” (non-entries were recoded as NA). For height, we ensured all data were presented in centimeters, and for weight, we ensured that all data were presented in kilograms. Models could report height and weight in metric or imperial units, so we converted from imperial to metric where required. We also sanity-checked the reported units, assuming heights > 100 to be in centimeters and those < 100 to be in inches, and weights < 80 to be in kilograms. Any non-entries of height or weight for a model was recoded as NA .
+
+```{r}
+# count faces per ethnicity category
+eth_rec <- count(data_models, ethnicity_rec, .drop = FALSE)
+eth_n <- as.list(eth_rec$n)
+names(eth_n) <- c(as.character(eth_rec$ethnicity_rec[1:8]), "NA")
+```
+
+
+For data cleaning, we first downloaded and reshaped the raw data from Experimentum. In the next step, we ensured that the models’ gender, race/ethnicity, and units of height and weight were consistently formatted across labs. 
+
+For gender and race/ethnicity, words presented in languages other than English were recoded to be presented in English (e.g., “mulher” to “female”, “preta” to “Black”). We then classified self-described race/ethnicity into one of seven categories (“White” (n = `r eth_n$White`), “Black” (n = `r eth_n$Black`), “Asian” (n = `r eth_n$Asian`), “Indigenous” (n = `r eth_n$Indigenous`), “MENA” (n = `r eth_n$MENA`) (Middle Eastern or North African), “Latine” (n = `r eth_n$Latine`), or “Mixed” (n = `r eth_n$Mixed`)), where possible. Descriptions that could not be clearly sorted into these categories were given “Ambiguous label” (n = `r eth_n[["Ambiguous label"]]`) and non-entries were recoded as NA (n = `r eth_n[["NA"]]`). 
+
+For height, we ensured all data were presented in centimeters, and for weight, we ensured that all data were presented in kilograms. Models could report height and weight in metric or imperial units, so we converted from imperial to metric where required. We also sanity-checked the reported units, assuming heights > 100 to be in centimeters and those < 100 to be in inches, and weights < 80 to be in kilograms. Any non-entries of height or weight for a model was recoded as NA .
 
 ```{r}
 #| label: tbl-model-demog
 #| tbl-cap: Summary of model demographic info
 
-data.frame(a = 1:5)
+data_models |>
+  mutate(gender = gender_rec) |>
+  summarise(
+    .by = gender,
+    n = n(),
+    age_min = min(age, na.rm = TRUE),
+    age_max = max(age, na.rm = TRUE),
+    age_mean = mean(age, na.rm = TRUE),
+    height_min = min(height_cm, na.rm = TRUE),
+    height_max = max(height_cm, na.rm = TRUE),
+    height_mean = mean(height_cm, na.rm = TRUE),
+    weight_min = min(weight_kg, na.rm = TRUE),
+    weight_max = max(weight_kg, na.rm = TRUE),
+    weight_mean = mean(weight_kg, na.rm = TRUE)
+  ) |>
+  flextable() |>
+  add_header_row(values = c("", "Age (years)", "Height (cm)", "Weight (kg)"),
+                colwidths = c(2, 3, 3, 3)) |>
+  set_header_labels(age_min = "min", 
+                    age_max = "max",
+                    age_mean = "mean",
+                    height_min = "min", 
+                    height_max = "max",
+                    height_mean = "mean",
+                    weight_min = "min", 
+                    weight_max = "max",
+                    weight_mean = "mean") |>
+  colformat_char(j = 1, na_str = "missing") |>
+  colformat_double(digits = 1) |>
+  flextable::width(j = 1, width = 1)
+          
 ```
 
 
@@ -251,22 +337,31 @@ RAW images were processed using webmorphR [@debruine_reproducible_2022], which f
 
 ```{r}
 #| label: fig-img-processing
-#| fig-cap: Visualise some steps of this with a delineated original, aligned version, and white balanced version.
+#| fig-cap: "Image processing steps: (A) the raw image, (B) the image automatically delineated and cropped to a standard alignment, (C) white balance correction."
 
-ggplot()
+knitr::include_graphics("fig/img-processing.png")
 ```
 
 
 #### Stimuli
 
-The number of stimuli was determined by the number of models recruited across the 20 research labs and how many models posed for each image type. The maximum number of targets per image type was 205^[The preregistration mis-stated the total number of models, rather than the maximum number of images, to be 205. The total number of models was 211], meaning each rater saw up to 205 stimuli. We obtained ratings of the front-facing standardised neutral (n = 205), unstandardised neutral (n = 188), standardised angry (n = 187), standardised disgusted (n = 184), standardised fearful (n = 175), standardised happy (n = 199), standardised sad (n = 183), and standardised surprised (n = 184).
+```{r}
+# count images for each emotion and unstandardised
+emo_n <- as.list(image_type_n$std)
+names(emo_n) <- image_type_n$emotion
+unstd <- image_type_n$unstd[[1]]
+```
+
+
+The number of stimuli was determined by the number of models recruited across the 20 research labs and how many models posed for each image type. The maximum number of targets per image type was 205^[The preregistration mis-stated the total number of models, rather than the maximum number of images, to be 205. The total number of models was 211], meaning each rater saw up to 205 stimuli. We obtained ratings of the front-facing standardised neutral (n = `r emo_n$neutral`), unstandardised neutral (n = `r unstd`), standardised angry (n = `r emo_n$anger`), standardised disgusted (n = `r emo_n$digust`), standardised fearful (n = `r emo_n$fear`), standardised happy (n = `r emo_n$happy`), standardised sad (n = `r emo_n$sad`), and standardised surprised (n = `r emo_n$surprised`).
 
 
 ```{r}
 #| label: fig-stim-examples
-#| fig-cap: An example of each stimulus (could incorporate the N table)
+#| fig-cap: An example of each type of stimulus, with the total number of stimuli of that type in parentheses.
+#| fig-alt: "Example face images for the 8 types of stimuli: unstandardised (177), neutral (205), anger (187), disgust (184), fear (175), happy (199), sad (183), surprised (184)"
 
-ggplot()
+knitr::include_graphics("fig/stim-types.png")
 ```
 
 
@@ -318,7 +413,16 @@ We recruited fluent English-speaking raters through Prolific <!--add prolific in
 
 #### Participants
 
-We aimed to collect 100 raters per rating condition to achieve stable averages and allow for exclusions [@hehman_assessing_2025], totalling 2100 raters. Altogether, 2115 raters completed the study. See Results for exclusions and demographics of the final sample.
+```{r}
+# replace this with actual calculations
+total_raters <- 2115
+total_rating_tasks <- 2158
+complete_raters <- 1936 # data_exp$session_id |> unique() |> length()
+excluded_raters <- nrow(data_excl)
+```
+
+
+We aimed to collect 100 raters per rating condition to achieve stable averages and allow for exclusions [@hehman_assessing_2025], totalling 2100 raters. Altogether, `r total_raters` raters completed the study. See Results for exclusions and demographics of the final sample.
 
 ### Results
 
@@ -326,9 +430,9 @@ We aimed to collect 100 raters per rating condition to achieve stable averages a
 
 In the raters’ demographic questionnaire, we standardized participants’ recording of their race/ethnicity similarly to the models’ by recoding their inputs into one of seven categories (“White”, “Black”, “Asian”, “Indigenous/Pacific Islander”, “MENA” (Middle Eastern or North African), “Latine”, or “Mixed”), or as  “Ambiguous label” when this was not possible. Any non-entries were recoded as NA. 
 
-A total of 2115 raters completed 2158 rating or categorisation tasks. We found that some raters did not complete all trials in tasks, some raters completed more than one task, and some raters completed more than the maximum number of trials in a task (likely by restarting the study or bypassing the back button block). Therefore, we removed incomplete tasks from our data, retained raters’ first complete tasks, and filtered our duplicate trials by keeping only raters’ first ratings for a duplicated trial. After these exclusions, and before implementing the pre-registered plan for data exclusions, we had complete and clean data from 1936 raters.
+A total of `r total_raters` raters completed `r total_rating_tasks` rating or categorisation tasks. We found that some raters did not complete all trials in tasks, some raters completed more than one task, and some raters completed more than the maximum number of trials in a task (likely by restarting the study or bypassing the back button block). Therefore, we removed incomplete tasks from our data, retained raters’ first complete tasks, and filtered our duplicate trials by keeping only raters’ first ratings for a duplicated trial. After these exclusions, and before implementing the pre-registered plan for data exclusions, we had complete and clean data from `r complete_raters` raters.
  
-Our pre-registered plan for data exclusions included removing raters who gave overly consistent responses, committed overly fast responses, self-reported not taking the study seriously when asked whether or not they completed the study authentically, and failed attention checks. In total, we excluded 49 raters for our pre-registered reasons for data exclusions. @tbl-exclusions shows the number of raters we excluded for each of our reasons. 
+Our pre-registered plan for data exclusions included removing raters who gave overly consistent responses, committed overly fast responses, self-reported not taking the study seriously when asked whether or not they completed the study authentically, and failed attention checks. In total, we excluded `r `excluded_raters` raters for our pre-registered reasons for data exclusions. @tbl-exclusions shows the number of raters we excluded for each of our reasons. 
  
 
 ```{r}
@@ -336,7 +440,20 @@ Our pre-registered plan for data exclusions included removing raters who gave ov
 #| tbl-cap: The number of raters excluded from analysis.
 # tbl-subcap: Multiple raters met more than one exclusion criterion; therefore, the counts for individual criteria do not sum to the total number of raters excluded.
 
-data.frame(a = 1:5)
+data_excl |>
+  summarise(
+    across(same_pcnt:attn_checks_passed, \(x) sum(!is.na(x)))
+  ) |>
+  rename("Overly consistent" = same_pcnt,
+         "Multiple completions" = n_unique,
+         "Overly fast" = med_rt,
+         "Honesty check" = honesty_check,
+         "Failed Attention Checks" = attn_checks_passed) |>
+  t() |>
+  as_tibble(rownames = "Reason") |>
+  rename(N = V1) |>
+  flextable() |>
+  flextable::width(j = 1, 2)
 ```
 
 We defined overly consistent responses as those raters who responded to at least 90% of the trials identically. We defined overly fast responses as those raters whose median reaction time fell below the 1st percentile of the overall distribution of median reaction times (see Figure 1 for the distribution of median reaction times). For our attention checks, the threshold for inclusion was to accurately complete six or more attention checks (i.e., participants were excluded if they failed more than one of the checks). After these exclusions, we had 1899 <!--update N--> raters in our sample (see @tbl-raters-per-task for the number of raters per task).
@@ -346,22 +463,42 @@ We defined overly consistent responses as those raters who responded to at least
 #| label: fig-rt-distribution
 #| fig-cap: Median reaction time distribution
 
-ggplot()
+data_exp |>
+  summarise(median_rt = median(rt), .by = c(session_id, exp_id)) |>
+  ggplot(aes(x = median_rt)) +
+  geom_histogram(binwidth = 100, boundary = 0, fill = "dodgerblue") +
+  coord_cartesian(xlim = c(0, 8000)) +
+  scale_x_continuous(expand = expand_scale()) +
+  labs(x = "Meadian RT (ms)",
+       y = "Count (per 100ms bin)")
 ```
 
  
 ```{r}
 #| label: tbl-raters-per-task
-#| tbl-cap: Number of raters per task
+#| tbl-cap: Number of raters per task. The emotion rating task was broken into 6 counterbalanced versions.
 
-data.frame(a = 1:5)
+data_exp |>
+  summarise(.by = exp,
+            raters = unique(session_id) |> length()
+            ) |>
+  arrange(exp) |>
+  flextable() |>
+  set_header_labels(exp = "Rating Task",
+                    raters = "N Raters") |>
+  flextable::width(j = 1, 2)
 ```
 
 Anonymous data are available on the OSF: [LINK] <!--[add link-->
  
 #### Rater Demographics
 
-We collected the following demographic data from our raters (N = 1676 of 1899<!--update N--> provided data): Age, gender, residence, ethnicity, and devices on which the ratings were completed. See @fig-gender-age and Tables 3-5 for demographic information.
+```{r}
+n_demog_provided <- data_qu$session_id |> unique() |> length()
+```
+
+
+We collected the following demographic data from our raters (N = `r n_demog_provided` <!--update N--> provided data): Age, gender, residence, ethnicity, and devices on which the ratings were completed. See @fig-gender-age and Tables 3-5 for demographic information.
 
 ```{r}
 #| label: fig-gender-age
@@ -372,7 +509,8 @@ data_qu |>
   geom_histogram(binwidth = 1) +
   scale_fill_manual(values = c("hotpink", "dodgerblue", "darkorchid", "gray")) +
   guides(fill  = guide_legend(position = "inside")) +
-  theme(legend.position.inside = c(.7, .7))
+  theme(legend.position.inside = c(.7, .7)) +
+  labs(x = "Age (years)", y = NULL)
 ```
 
 
@@ -380,21 +518,40 @@ data_qu |>
 #| label: tbl-raters-country
 #| tbl-cap: Rater country of residence
 
-data.frame(1:5)
+data_qu |> 
+  count(residence) |>
+  summarise(.by = n, res = paste(residence, collapse = ", ")) |>
+  arrange(desc(n)) |>
+  select(res, n) |>
+  flextable() |>
+  set_header_labels(res = "Country of Residence", n = "N") |>
+  flextable::width(j = 1, 2)
 ```
  
 ```{r}
 #| label: tbl-raters-eth
 #| tbl-cap: Rater race/ethnicity
 
-data.frame(1:5)
+data_qu |> 
+  count(ethnicity_rec) |>
+  arrange(desc(n)) |>
+  flextable() |>
+  colformat_char(na_str = "Missing") |>
+  set_header_labels(ethnicity_rec = "Ethnicity", n = "N") |>
+  flextable::width(j = 1, 2)
 ```
 
 ```{r}
 #| label: tbl-raters-dev
 #| tbl-cap: Devices used by raters to complete the study
 
-data.frame(1:5)
+data_qu |> 
+  count(device) |>
+  arrange(desc(n)) |>
+  flextable() |>
+  colformat_char(na_str = "Missing") |>
+  set_header_labels(device = "Device Used", n = "N") |>
+  flextable::width(j = 1, 2)
 ```
 
 
