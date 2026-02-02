@@ -45,12 +45,18 @@ csl: apa.csl
 #| include: false
 
 library(tidyverse)
+library(flextable)
 #devtools::install_github("debruine/webmorphR@dev")
 library(webmorphR)
 
 # Rating data
+ct <- cols(
+  age = col_integer(),
+  height = col_integer(),
+  weight = col_integer()
+)
 data_models <- read_csv("data/manyfaces-pilot-models_cleaned.csv",
-                     show_col_types = FALSE)
+                        col_types = ct)
 
 # Rating data
 data_exp <- read_csv("data/manyfaces-pilot-exp_cleaned.csv",
@@ -211,18 +217,39 @@ data_models |>
 ```{r}
 #| label: fig-img-examples
 #| fig-cap: Example images of each level of standardisation, angle, and expression
+#| fig-alt: "A 7x6 grid of pictures of a woman in a white t-shirt with a white headband, showing different angles and expressions. Top labels: neutral, anger, disgust, fear, happy, sad, surprised. Side labels: standardised front, standardised left 90 (side profile), standardised left 45 (three-quarter profile), standardised right 45, standardised right 90, unstandardised front."
 
-ggplot()
+knitr::include_graphics("fig/img-examples.png")
 ```
 
 #### Model Demographics
+
 For data cleaning, we first downloaded and reshaped the raw data from Experimentum. In the next step, we ensured that the models’ gender, race/ethnicity, and units of height and weight were consistently formatted across labs. For gender and race/ethnicity, words presented in languages other than English were recoded to be presented in English (e.g., “mulher” to “female”, “preta” to “Black”). We then classified self-described race/ethnicity into one of seven categories (“White”, “Black”, “Asian”, “Indigenous”, “MENA” (Middle Eastern or North African), “Latine”, or “Mixed”), where possible. Descriptions that could not be clearly sorted into these categories were given “Ambiguous label” (non-entries were recoded as NA). For height, we ensured all data were presented in centimeters, and for weight, we ensured that all data were presented in kilograms. Models could report height and weight in metric or imperial units, so we converted from imperial to metric where required. We also sanity-checked the reported units, assuming heights > 100 to be in centimeters and those < 100 to be in inches, and weights < 80 to be in kilograms. Any non-entries of height or weight for a model was recoded as NA .
 
 ```{r}
 #| label: tbl-model-demog
 #| tbl-cap: Summary of model demographic info
 
-data.frame(a = 1:5)
+data_models |>
+  mutate(gender = gender_rec) |>
+  summarise(
+    .by = gender,
+    n = n(),
+    age_min = min(age, na.rm = TRUE),
+    age_max = max(age, na.rm = TRUE),
+    age_mean = mean(age, na.rm = TRUE),
+    height_min = min(height, na.rm = TRUE),
+    height_max = max(height, na.rm = TRUE),
+    height_mean = mean(height, na.rm = TRUE),
+    weight_min = min(weight, na.rm = TRUE),
+    weight_max = max(weight, na.rm = TRUE),
+    weight_mean = mean(weight, na.rm = TRUE)
+  ) |>
+  flextable() |>
+  separate_header() |>
+  colformat_double(digits = 1) |>
+  flextable::width(j = 1, width = 1)
+          
 ```
 
 
