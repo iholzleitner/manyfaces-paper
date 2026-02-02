@@ -2,6 +2,16 @@
 library(webmorphR)
 library(tidyverse)
 
+# Model data
+ct <- cols(
+  age = col_integer(),
+  height = col_integer(),
+  weight = col_integer(),
+  ethnicity_rec = col_factor(levels = c("White", "Black", "Asian", "Indigenous", "MENA", "Latine", "Mixed", "Ambiguous label"), include_na = TRUE)
+)
+data_models <- read_csv("../data/manyfaces-pilot-models_cleaned.csv",
+                        col_types = ct)
+
 emo_levels <- c(
   neu = "neutral",
   ang = "anger",
@@ -12,9 +22,19 @@ emo_levels <- c(
   sur = "surprised"
 )
 
+image_type_n <- data_models |>
+  select(model_id:unstd_neu) |>
+  pivot_longer(std_ang:unstd_neu) |>
+  filter(value == 1) |>
+  count(name) |>
+  separate(name, c("type", "emotion")) |>
+  pivot_wider(names_from = type, values_from = n) |>
+  mutate(emotion = factor(emotion, names(emo_levels), emo_levels)) |>
+  arrange(emotion)
+
 # fig-img-examples ----
 
-raw_stim <- read_stim("images/raw/", "std_") |>
+raw_stim <- read_stim("images/raw/", "MF0006_0007_") |>
   resize(1000)
 
 df <- data.frame(id = names(raw_stim)) |>
@@ -61,8 +81,6 @@ std_labels <- blank(6, raw_stim[[1]]$height, raw_stim[[1]]$height / 3) |>
   ) |>
   rotate(-90, keep_size = FALSE)
 
-
-
 raw_plot <- plot_rows(
   c(blank(), labels),
   c(std_labels[[1]], raw_stim[std_0]),
@@ -88,3 +106,27 @@ img_proc <- c(std_neu_0$raw, align_tem, std_neu_0$wb) |>
   plot_stim()
 
 write_stim(img_proc, "fig", "img-processing", "png")
+
+# fig_angles ----
+angle_labels <- c("Left 90", "Left 45", "Front", "Right 45", "Right 90")
+stim_angle <- paste0("MF0006_0007_std_neu_", c("l90", "l45", "0", "r45", "r90"))
+fig_angle <- raw_stim[stim_angle] |>
+  mlabel(angle_labels, "north-west", "+10+10") |>
+  plot_stim(nrow = 1)
+write_stim(fig_angle, "fig", "angles", "png")
+
+# fig-stim-types ----
+wb_stim <- read_stim("images/wb/", "MF0006_0007_") |>
+  resize(1000)
+
+n <- c(image_type_n$unstd[[1]], image_type_n$std)
+stim_type_labels <- c("unstandardised", emo_levels) |>
+  paste0(" (", n, ")")
+
+stim <- sprintf("MF0006_0007_std_%s_0", names(emo_levels)) |>
+  c("MF0006_0007_unstd_neu_0", x = _)
+fig_stim_types <- wb_stim[stim] |>
+  pad(150, 0, 0, 0) |>
+  mlabel(stim_type_labels) |> # , "north-west", "+10+10") |>
+  plot_stim(nrow = 1)
+write_stim(fig_stim_types, "fig", "stim-types", "png")
