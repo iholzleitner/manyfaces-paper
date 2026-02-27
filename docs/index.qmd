@@ -44,13 +44,17 @@ csl: apa.csl
 #| label: setup
 #| include: false
 
+library(psych) # ICC, alpha, omega
+library(furrr) # run code parallel
 library(tidyverse)
 library(flextable)
 #devtools::install_github("debruine/webmorphR@dev")
 #library(webmorphR)
 
 theme_set(theme_bw(base_size = 14))
-source("code/1_data_prep.R")
+source("code/custom_functions.R")
+source("code/1_dataprep.R")
+source("code/2_agreement.R")
 ```
 
 
@@ -453,7 +457,7 @@ exclusions |>
 
 We defined overly consistent responses as those raters who responded to at least 90% of the trials identically. We defined overly fast responses as those raters whose median reaction time fell below the 1st percentile of the overall distribution of median reaction times (see Figure 1 for the distribution of median reaction times). For our attention checks, the threshold for inclusion was to accurately complete six or more attention checks (i.e., participants were excluded if they failed more than one of the checks). After these exclusions, we had `r final_raters` raters in our sample (see @tbl-raters-per-task for the number of raters per task).
 
-_QU: should section mention additional overly consistent exclusions and self-reported honesty checks?_
+<!--should section mention additional overly consistent exclusions and self-reported honesty checks?-->
 
 ```{r}
 #| label: fig-rt-distribution
@@ -547,7 +551,7 @@ data_quest |>
   count(device) |>
   arrange(desc(n)) |>
   flextable() |>
-  colformat_char(na_str = "Missing") |>
+  colformat_char(na_str = "missing") |>
   set_header_labels(device = "Device Used", n = "N") |>
   flextable::width(j = 1, 2)
 ```
@@ -555,31 +559,83 @@ data_quest |>
 
 #### Agreement Indicators for the Ratings
 
+
 ##### Standardized Trait Ratings
 
-In the first step, we calculated intraclass correlations for traits observed across tasks for our standardized images. The number of raters ranged from 83 to 94 for these traits. The average reliability across raters was very good for rating attractiveness, dominance, trustworthiness, and gender-typicality, but poorer for rating memorability (see @tbl-std-neu-agree).
+In the first step, we calculated intraclass correlations for traits observed across tasks for our standardized images. The number of raters ranged from 80 to 91 for these traits<!--should these values be drawn from data?-->. The average reliability across raters was very good for rating attractiveness, dominance, trustworthiness, and gender-typicality, but poorer for rating memorability (see @tbl-std-neu-agree).
 
 ```{r}
 #| label: tbl-std-neu-agree
 #| tbl-cap: Agreement for ratings of standardized neutral faces
 # tbl-subcap: ICCs values are ICC (2,k) values.
 
-data.frame(1:5)
+data_trait |> 
+  group_by(exp) |> 
+  group_map(calc_icc) |> 
+  bind_rows() |> 
+  mutate(across(where(is.numeric), ~ round(.x, 2)))
 ```
 
  
-Next, we examined the number of raters required for trait ratings to reach stable levels of reliability defined as ICC (2,k) values of 0.75 and 0.90 (see Figure 3). Attractiveness ratings stabilized with the fewest participants, reaching an ICC (2,k) of 0.75 at approximately 18 raters. It was also the only trait to exceed an ICC (2,k) of 0.90, which occurred with 50 raters. Ratings for dominance, trustworthiness, and gender-typicality reached an ICC (2,k) of 0.75 with approximately 35-40 raters (see @fig-icc-cos).
+Next, we examined the number of raters required for trait ratings to reach stable levels of reliability defined as ICC (2,k) values of 0.75 and 0.90 (see Figure 3). Attractiveness ratings stabilized with the fewest participants, reaching an ICC (2,k) of 0.75 at approximately 18 raters. It was also the only trait to exceed an ICC (2,k) of 0.90, which occurred with 50 raters. Ratings for dominance, trustworthiness, and gender-typicality reached an ICC (2,k) of 0.75 with approximately 35-40 raters (see @fig-icc-cos). <!--should these values be drawn from data? the ones currently given are definitely not right: we only sampled at intervals of 10-->
 
 
 ```{r}
 #| label: fig-icc-cos
 #| fig-cap: Corridors of stability for ICCs
 
-ggplot()
+icc2k_corridor_summary |> 
+  ggplot(aes(x = n_raters_sampled)) +
+  geom_ribbon(aes(ymin = ICC2_k_low, ymax = ICC2_k_high), 
+              alpha = 0.15, fill = "grey60") +
+  # Median ICC(2,k)
+  geom_line(aes(y = ICC2_k_median), linewidth = 0.8, colour = "black") +
+  # Thresholds: 0.75 grey, 0.9 black
+  geom_hline(yintercept = 0.75, linetype = "dashed", colour = "grey40") +
+  geom_hline(yintercept = 0.9, linetype = "dashed", colour = "black") +
+  geom_vline(data = thresholds_median |> filter(!is.na(N_for_075_median)),
+             aes(xintercept = N_for_075_median), colour = "red", linetype = "dotted") +
+  geom_text(data = thresholds_median |> filter(!is.na(N_for_075_median)),
+            aes(x = N_for_075_median, y = 0.60, label = paste0("N=", N_for_075_median)),
+            angle = 0, hjust = -0.2, vjust = 0,, colour = "red", size = 3) +
+  facet_wrap(~ experiment) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(
+    x = "Number of raters sampled", 
+    y = "ICC(2,k)") +
+  scale_x_continuous(breaks = seq(10, 100, 10), labels = seq(10, 100, 10)) +
+  labs(x = "Number of raters sampled", y = "ICC(2,k)") +
+  theme_minimal(base_size = 12) +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 11),
+    axis.title = element_text(size = 12),
+    plot.subtitle = element_text(size = 11)
+  )
 ```
 
  
-For checking internal consistency of our ratings, we used both Cronbach’s alpha (α) and McDonald’s omega total (ωt) (see @tbl-std-neu-agree). For four of the five traits, both α and ωt exceeded 0.9, indicating excellent internal consistency. For the fifth trait (memorability), α was lower (0.65), indicating doubtful internal consistency when assuming equal item contributions (tau-equivalence) in the ratings. However, ωt for memorability was substantially higher (0.87), indicating good internal consistency after taking into account variance among item or rater contributions.
+For checking internal consistency <!--this is not right: as per preregistration, alpha and wt are being calculated as measures of RATER consistency / inter-rater agreement--> of our ratings, we used both Cronbach’s alpha (α) and McDonald’s omega total (ωt) (see @tbl-std-neu-alpha-omega). For four of the five traits, both α and ωt exceeded 0.9, indicating excellent internal consistency. For the fifth trait (memorability), α was lower (0.65), indicating doubtful internal consistency when assuming equal item contributions (tau-equivalence) in the ratings. However, ωt for memorability was substantially higher (0.87), indicating good internal consistency after taking into account variance among item or rater contributions.
+
+<!--Warnings need dealing with:
+ * "Some items were negatively correlated...": potentially reflects true inter-rater disagreement; reversing raters not appropriate in this context
+ * "Omega_h... not meaningful": omega_h is undefined when computing a one-factor solution; omega_t remains valid and is the relevant statistic reported.
+ So I don't think we need to do anything but suppressing these?
+ -->
+
+```{r}
+#| warning: false
+#| message: false
+#| label: tbl-std-neu-alpha-omega
+#| tbl-cap: Agreement for ratings of standardized neutral faces
+# tbl-subcap: FILL ME IN
+
+data_trait |> 
+  group_by(exp) |> 
+  group_map(purrr::partial(calc_alpha_omega)) |> 
+  bind_rows() |> 
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
+```
  
 ##### Unstandardized Trait Ratings
 
