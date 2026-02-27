@@ -7,17 +7,17 @@ check_unique_values <- function(data,
                                 col_map = list(p_id = "p_id",
                                                stim_id = "stim_id",
                                                rating = "rating")) {
-  
+
   p_id <- col_map$p_id
   stim_id <- col_map$stim_id
   rating <- col_map$rating
-  
-  rating_matrix <- data |> 
-    dplyr::select(all_of(c(p_id, stim_id, rating))) |> 
-    tidyr::pivot_wider(names_from = all_of(p_id), values_from = all_of(rating)) |> 
-    dplyr::select(-all_of(stim_id)) |> 
+
+  rating_matrix <- data |>
+    dplyr::select(all_of(c(p_id, stim_id, rating))) |>
+    tidyr::pivot_wider(names_from = all_of(p_id), values_from = all_of(rating)) |>
+    dplyr::select(-all_of(stim_id)) |>
     as.matrix()
-  
+
   apply(rating_matrix, 2, function(x) length(unique(x)))
 }
 
@@ -30,9 +30,9 @@ heatmap <- function(data, exp_id, label) {
     geom_tile() +
     facet_wrap(~lab_id) +
     scale_fill_viridis_c() +
-    labs(x = label, y = NULL, 
+    labs(x = label, y = NULL,
          title = paste(label, "Ratings")) +
-    theme(legend.position = "none", 
+    theme(legend.position = "none",
           axis.text.x = element_text(angle = 90))
 }
 
@@ -43,7 +43,7 @@ get_mode_info <- function(x) {
   mode_val <- names(tab)[which.max(tab)]
   freq <- max(tab)
   prop <- freq / length(x)
-  
+
   list(age_mode = mode_val, age_prop = prop)
 }
 
@@ -72,43 +72,43 @@ ttest_summary <- function(x, y) {
 calc_icc <- function(data,
                      group,
                      check_dropped_raters = FALSE) {
-  
+
   # Reshape data
-  rating_matrix <- data |> 
-    select(session_id, trial_name, dv) |> 
-    pivot_wider(names_from = session_id, values_from = dv) |> 
-    dplyr::select(-c(trial_name)) |> 
+  rating_matrix <- data |>
+    select(session_id, trial_name, dv) |>
+    pivot_wider(names_from = session_id, values_from = dv) |>
+    dplyr::select(-c(trial_name)) |>
     as.matrix()
-  
+
   # CHECK UNIQUE RESPONSES
   rater_names <- colnames(rating_matrix)
   n_raters_initial <- ncol(rating_matrix)
-  
+
   # Drop raters with <3 unique categories
   unique_counts <- apply(rating_matrix, 2, function(x) length(unique(x)))
   var_ok <- unique_counts >= 3
   dropped_raters_var <- rater_names[!var_ok]
-  
+
   rating_matrix <- rating_matrix[, var_ok, drop = FALSE]
   n_raters_final <- ncol(rating_matrix)
-  
+
   # Compute ICCs if ≥2 raters left
   if (n_raters_final >= 2) {
     icc_result <- suppressWarnings(psych::ICC(rating_matrix)$results)
-    
+
     icc2k_row <- icc_result |> filter(type == "ICC2k")
 
     icc_2k <- icc2k_row$ICC
     icc_2k_lower <- icc2k_row$`lower bound`
     icc_2k_upper <- icc2k_row$`upper bound`
-    
+
   } else {
 
     icc_2k <- NA_real_
     icc_2k_lower <- NA_real_
     icc_2k_upper <- NA_real_
   }
-  
+
   # Return summary
   if (check_dropped_raters) {
     tibble(experiment = group$exp,
@@ -128,29 +128,29 @@ calc_icc <- function(data,
 }
 
 
-### --- RESAMPLING: Calculate "corridor of stability" (COS)
+### --- RESAMPLING: Calculate "corridor of stability" (COS) ----
 calc_icc_cos <- function(data, exp,
                          n_raters_seq = seq(10, 100, 10),
                          n_iter = 500) {
 
   # Reshape data
-  rating_matrix <- data |> 
-    select(session_id, trial_name, dv) |> 
-    pivot_wider(names_from = session_id, values_from = dv) |> 
-    select(-trial_name) |> 
+  rating_matrix <- data |>
+    select(session_id, trial_name, dv) |>
+    pivot_wider(names_from = session_id, values_from = dv) |>
+    select(-trial_name) |>
     as.matrix()
 
   # Adjust n_raters_seq to not exceed max_raters
   available_raters <- colnames(rating_matrix)
   max_raters <- length(available_raters)
   n_raters_seq <- n_raters_seq[n_raters_seq <= max_raters]
-  
+
   # Run the resampling loop
   all_results <- vector("list", length(n_raters_seq) * n_iter)
   counter <- 1
-  
+
   for (n_raters_sampled in n_raters_seq) {
-    
+
     for (iter in seq_len(n_iter)) {
       sampled_raters <- sample(available_raters, n_raters_sampled, replace = FALSE)
       sampled_matrix <- rating_matrix[, sampled_raters, drop = FALSE]
@@ -180,11 +180,11 @@ run_or_load_icc <- function(exp_name, data,
                             n_raters_seq = seq(10, 100, 10),
                             n_iter = 50) {
   if (!dir.exists(cache_dir)) dir.create(cache_dir, recursive = TRUE)
-  
+
   data_hash <- digest::digest(data, algo = "xxhash64")
   cache_filename <- paste0("icc_", exp_name, "_", data_hash, ".rds")
   cache_path <- file.path(cache_dir, cache_filename)
-  
+
   if (file.exists(cache_path)) {
     readr::read_rds(cache_path)
   } else {
@@ -192,7 +192,7 @@ run_or_load_icc <- function(exp_name, data,
                         exp = exp_name,
                         n_raters_seq = n_raters_seq,
                         n_iter = n_iter)
-    
+
     readr::write_rds(out, cache_path)
     out
   }
@@ -207,35 +207,41 @@ run_or_load_icc <- function(exp_name, data,
 calc_alpha_omega <- function(data,
                              group,
                              check_dropped_raters = FALSE) {
-  
+
   # Prepare rating matrix
-  rating_matrix <- data |> 
-    select(session_id, trial_name, dv) |> 
-    pivot_wider(names_from = session_id, values_from = dv) |> 
-    select(-c(trial_name)) |> 
+  rating_matrix <- data |>
+    select(session_id, trial_name, dv) |>
+    pivot_wider(names_from = session_id, values_from = dv) |>
+    select(-c(trial_name)) |>
     as.matrix()
-  
+
   # CHECK UNIQUE RESPONSES
   rater_names <- colnames(rating_matrix)
   n_raters_initial <- ncol(rating_matrix)
-  
+
   # Drop raters with <3 unique categories
   unique_counts <- apply(rating_matrix, 2, function(x) length(unique(x)))
   var_ok <- unique_counts >= 3
   dropped_raters_var <- rater_names[!var_ok]
-  
+
   rating_matrix <- rating_matrix[, var_ok, drop = FALSE]
   n_raters_final <- ncol(rating_matrix)
 
   # Compute alpha and omega if ≥2 raters left
-  if (n_raters_final >= 2) {
-    alpha_val <- psych::alpha(rating_matrix)$total$raw_alpha
-    omega_t <- psych::omega(rating_matrix, nfactors = 1, plot = FALSE)$omega.tot
-  } else {
-    alpha_val <- NA_real_
-    omega_t <- NA_real_
-  }
-  
+  # Output suppressed as it is not relevant here:
+  # "Some items were negatively correlated...": potentially reflects true inter-rater disagreement; reversing raters not appropriate in this context
+  # "Omega_h... not meaningful": omega_h is undefined when computing a one-factor solution; omega_t remains valid and is the relevant statistic reported.
+
+  sink <- capture.output({
+    if (n_raters_final >= 2) {
+      alpha_val <- psych::alpha(rating_matrix)$total$raw_alpha
+      omega_t <- psych::omega(rating_matrix, nfactors = 1, plot = FALSE)$omega.tot
+    } else {
+      alpha_val <- NA_real_
+      omega_t <- NA_real_
+    }
+  })
+
   # Return summary
   if (check_dropped_raters) {
     tibble(experiment = group$exp,
@@ -325,13 +331,13 @@ calc_stability_stats <- function(data = data,
   trait <- col_map$trait
   stim_id <- col_map$stim_id
   rating <- col_map$rating
-  
+
   # Center ratings for each trait
   data_centered <- data |>
     group_by(.data[[trait]], .data[[stim_id]]) |>
     mutate(rating_c = as.numeric(scale(.data[[rating]], scale = FALSE))) |>
     ungroup()
-  
+
   # Resample ratings for each trait and stim_id (using resample_group())
   means_resampled <- data_centered |>
     group_by(.data[[trait]], .data[[stim_id]]) |>
@@ -339,7 +345,7 @@ calc_stability_stats <- function(data = data,
     mutate(resamples = map(data, ~ resample_group(.x$rating_c, N, iterations))) |>
     select(-data) |>
     unnest(resamples)
-  
+
   # For each sample size of raters, calculate interval encompassing x% of values
   cis <- means_resampled |>
     ungroup() |>
@@ -350,23 +356,23 @@ calc_stability_stats <- function(data = data,
     unnest_wider(ci, names_sep = "_") |>
     rename(ll = ci_1,
            ul = ci_2)
-  
-  
+
+
   # Calculate point of stability based on how averages behave relative to CIs
   pos <- calc_pos(cis = cis, threshold = cos_threshold, trait = trait)
-  
+
   if (save_means) {
     list(means = means_resampled, cis = cis, pos = pos)
   } else {
     list(cis = cis, pos = pos)
   }
-  
+
 }
 
 # RESAMPLING
 resample_group <- function(ratings, N, iterations) {
   results <- vector("list", N)
-  
+
   for (n in 1:N) {
     means <- numeric(iterations)
     for (i in 1:iterations) {
@@ -384,12 +390,12 @@ resample_group <- function(ratings, N, iterations) {
 # Threshold to be adjusted to whatever is desired (e.g., values used by Hehman et al., 2018)
 # Note: Hehman et al. compare min CI to set threshold, but I think it would be more conservative to use max CI?
 calc_pos <- function(cis, threshold, inarow = 1, trait = "trait") {
-  
+
   threshold <- abs(threshold)
 
-  cis  |> 
+  cis  |>
     group_by(across(all_of(trait))) |>
-    mutate(max_ci = pmax(abs(ll), abs(ul)))  |> 
+    mutate(max_ci = pmax(abs(ll), abs(ul)))  |>
     summarise(
       pos = {
         stable <- max_ci < threshold

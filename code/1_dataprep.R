@@ -184,7 +184,7 @@ complete_raters <- exp_long |>
 # ------------------------------------------------------------------
 
 # --- OVERLY CONSISTENT RESPONSES
-# Participants were excluded based on overly consistent responding, i.e. if they responded to at least 90% of trials identically. Please note that four additional participants with only two unique responses across all trials were identified during reliability analyses and excluded under the original 'overly consistent responding' criterion.
+# Participants were excluded based on overly consistent responding, i.e. if they responded to at least 90% of trials identically. Please note that four additional participants with only two unique responses across all trials were identified during reliability analyses and also excluded as 'overly consistent'.
 overly_consistent_prereg <- exp_long |>
   filter(!startsWith(trial_name, "check_")) |>
   summarise(

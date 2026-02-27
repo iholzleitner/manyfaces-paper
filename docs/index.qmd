@@ -457,7 +457,7 @@ exclusions |>
 
 We defined overly consistent responses as those raters who responded to at least 90% of the trials identically. We defined overly fast responses as those raters whose median reaction time fell below the 1st percentile of the overall distribution of median reaction times (see Figure 1 for the distribution of median reaction times). For our attention checks, the threshold for inclusion was to accurately complete six or more attention checks (i.e., participants were excluded if they failed more than one of the checks). After these exclusions, we had `r final_raters` raters in our sample (see @tbl-raters-per-task for the number of raters per task).
 
-<!--should section mention additional overly consistent exclusions and self-reported honesty checks?-->
+<!--should section mention additional overly consistent exclusions (N=4) and self-reported honesty checks?-->
 
 ```{r}
 #| label: fig-rt-distribution
@@ -567,7 +567,6 @@ In the first step, we calculated intraclass correlations for traits observed acr
 ```{r}
 #| label: tbl-std-neu-agree
 #| tbl-cap: Agreement for ratings of standardized neutral faces
-# tbl-subcap: ICCs values are ICC (2,k) values.
 
 data_trait |> 
   group_by(exp) |> 
@@ -617,18 +616,11 @@ icc2k_corridor_summary |>
  
 For checking internal consistency <!--this is not right: as per preregistration, alpha and wt are being calculated as measures of RATER consistency / inter-rater agreement--> of our ratings, we used both Cronbach’s alpha (α) and McDonald’s omega total (ωt) (see @tbl-std-neu-alpha-omega). For four of the five traits, both α and ωt exceeded 0.9, indicating excellent internal consistency. For the fifth trait (memorability), α was lower (0.65), indicating doubtful internal consistency when assuming equal item contributions (tau-equivalence) in the ratings. However, ωt for memorability was substantially higher (0.87), indicating good internal consistency after taking into account variance among item or rater contributions.
 
-<!--Warnings need dealing with:
- * "Some items were negatively correlated...": potentially reflects true inter-rater disagreement; reversing raters not appropriate in this context
- * "Omega_h... not meaningful": omega_h is undefined when computing a one-factor solution; omega_t remains valid and is the relevant statistic reported.
- So I don't think we need to do anything but suppressing these?
- -->
-
 ```{r}
 #| warning: false
 #| message: false
 #| label: tbl-std-neu-alpha-omega
 #| tbl-cap: Agreement for ratings of standardized neutral faces
-# tbl-subcap: FILL ME IN
 
 data_trait |> 
   group_by(exp) |> 
