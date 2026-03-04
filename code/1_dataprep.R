@@ -204,6 +204,10 @@ overly_consistent_additional <- exp_long |>
 overly_consistent <- overly_consistent_prereg |>
   full_join(overly_consistent_additional, by=c("session_id", "exp_id"))
 
+additionally_excl <- overly_consistent |>
+  filter(is.na(same_pcnt)) |>
+  nrow()
+
 # --- OVERLY FAST RESPONSES
 # Participants were excluded based on overly fast responding, i.e. if their median reaction time fell below the 1st percentile of the overall distribution of median reaction times.
 

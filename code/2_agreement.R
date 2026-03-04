@@ -67,7 +67,7 @@ icc2k_corridor_summary <- icc_corridor |>
   )
 
 # Calculate median thresholds
-thresholds_median <- icc2k_corridor_summary |>
+thresholds_median_075 <- icc2k_corridor_summary |>
   group_by(experiment) |>
   summarise(
     N_for_075_median = ifelse(length(n_raters_sampled[ICC2_k_median >= 0.75]) > 0,
@@ -75,7 +75,16 @@ thresholds_median <- icc2k_corridor_summary |>
                               NA),
     .groups = "drop")
 
-#print(thresholds_median)
+thresholds_median_090 <- icc2k_corridor_summary |>
+  group_by(experiment) |>
+  summarise(
+    N_for_090_median = ifelse(length(n_raters_sampled[ICC2_k_median >= 0.90]) > 0,
+                              min(n_raters_sampled[ICC2_k_median >= 0.90]),
+                              NA),
+    .groups = "drop")
+
+n_075 <- thresholds_median_075 |> deframe()
+n_090 <- thresholds_median_090 |> deframe()
 
 
 # ------------------------------------------------------------------
