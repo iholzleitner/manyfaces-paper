@@ -338,13 +338,27 @@ calc_stability_stats <- function(data = data,
     mutate(rating_c = as.numeric(scale(.data[[rating]], scale = FALSE))) |>
     ungroup()
 
-  # Resample ratings for each trait and stim_id (using resample_group())
-  means_resampled <- data_centered |>
+  # Split into a list by trait x stim_id
+  groups <- data_centered |>
     group_by(.data[[trait]], .data[[stim_id]]) |>
-    nest() |>
-    mutate(resamples = map(data, ~ resample_group(.x$rating_c, N, iterations))) |>
-    select(-data) |>
-    unnest(resamples)
+    group_split()
+
+  group_keys <- data_centered |>
+    group_by(.data[[trait]], .data[[stim_id]]) |>
+    group_keys()
+
+  # Parallelise over groups explicitly
+  means_list <- furrr::future_map(
+    groups,
+    ~ resample_group(.x$rating_c, N, iterations),
+    .options = furrr::furrr_options(seed = TRUE)
+  )
+
+  # Combine with keys
+  means_resampled <- bind_cols(
+    group_keys[rep(seq_len(nrow(group_keys)), each = N * iterations), ],
+    bind_rows(means_list)
+  )
 
   # For each sample size of raters, calculate interval encompassing x% of values
   cis <- means_resampled |>
@@ -371,19 +385,20 @@ calc_stability_stats <- function(data = data,
 
 # RESAMPLING
 resample_group <- function(ratings, N, iterations) {
-  results <- vector("list", N)
-
-  for (n in 1:N) {
-    means <- numeric(iterations)
-    for (i in 1:iterations) {
-      means[i] <- mean(sample(ratings, size = n, replace = TRUE))
-    }
-    results[[n]] <- tibble(sample_size = n,
-                           iteration = 1:iterations,
-                           mean_rating = means)
+  result <- matrix(NA_real_, nrow = N, ncol = iterations)
+  for (n in seq_len(N)) {
+    result[n, ] <- colMeans(matrix(
+      sample(ratings, size = n * iterations, replace = TRUE),
+      nrow = n
+    ))
   }
-  bind_rows(results)
+  tibble(
+    sample_size = rep(seq_len(N), iterations),
+    iteration   = rep(seq_len(iterations), each = N),
+    mean_rating = as.vector(result)
+  )
 }
+
 
 # POINT OF STABILITY
 # Based on CIs for each of respective sample sizes

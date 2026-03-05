@@ -3,6 +3,10 @@
 # --- Code for Results: Agreement Indicators and Results: Points of stability
 ##############################################################################
 
+# Using parallel cores to speed things up; check how many cores are available
+workers <- max(1, parallel::detectCores(logical = FALSE) - 1)
+
+# pull out relevant data
 data_trait <- data_exp |>
   filter(exp == "attractive" | exp == "dominant"  | exp == "trustworthy"  | exp == "gender-typical"  | exp == "memorable") |>
   mutate(exp = factor(exp, levels = c("attractive", "dominant", "trustworthy", "gender-typical", "memorable"))) |>
@@ -30,7 +34,7 @@ data_emo_cat <- data_exp |>
 set.seed(123)
 
 # Set a stable parallel plan
-future::plan(multisession, workers = 3)
+future::plan(multisession, workers = workers)
 
 # Get unique experiments
 experiments <- unique(data_trait$exp)
@@ -91,3 +95,84 @@ n_090 <- thresholds_median_090 |> deframe()
 # --- POINTS OF STABILITY
 # ------------------------------------------------------------------
 
+# --- STANDARDISED RATINGS
+
+# To save time, output cached
+if (!file.exists("cache/pos_traits_std.rds")) {
+  set.seed(123)
+  future::plan(multisession, workers = workers)
+  stability_stats_traits <- calc_stability_stats(data = data_trait,
+                                                 N = 100,
+                                                 iterations = 300,
+                                                 ci_interval = 0.95, ci_method = "percentile",
+                                                 cos_threshold = 0.5,
+                                                 save_means = FALSE, # only save if actually needed (huge)
+                                                 col_map = list(trait = "exp",
+                                                                stim_id = "trial_name",
+                                                                rating = "dv"))
+
+  future::plan(sequential)
+  saveRDS(stability_stats_traits, "cache/pos_traits_std.rds")
+} else {
+  stability_stats_traits <- readRDS("cache/pos_traits_std.rds")
+}
+
+summary_ci_traits <- stability_stats_traits$cis |>
+  group_by(exp, sample_size) |>
+  summarise(ul = mean(ul),
+            ll = mean(ll),
+            .groups = "drop")
+
+
+# --- UNSTANDARDISED RATINGS
+if (!file.exists("cache/pos_traits_unstd.rds")) {
+  set.seed(123)
+  future::plan(multisession, workers = workers)
+  stability_stats_traits_unstd <- calc_stability_stats(data = data_trait_unstd,
+                                                       N = 100,
+                                                       iterations = 300,
+                                                       ci_interval = 0.95, ci_method = "percentile",
+                                                       cos_threshold = 0.5,
+                                                       save_means = FALSE,
+                                                       col_map = list(trait = "exp",
+                                                                      stim_id = "trial_name",
+                                                                      rating = "dv"))
+
+  future::plan(sequential)
+  saveRDS(stability_stats_traits_unstd, "cache/pos_traits_unstd.rds")
+} else {
+  stability_stats_traits_unstd <- readRDS("cache/pos_traits_unstd.rds")
+}
+
+summary_ci_traits_unstd <- stability_stats_traits_unstd$cis |>
+  group_by(exp, sample_size) |>
+  summarise(ul = mean(ul),
+            ll = mean(ll),
+            .groups = "drop")
+
+
+# --- EMOTION INTENSITY RATINGS
+if (!file.exists("cache/pos_emo.rds")) {
+  set.seed(123)
+  future::plan(multisession, workers = workers)
+  stability_stats_emo_int <- calc_stability_stats(data = data_emo_int,
+                                                  N = 100,
+                                                  iterations = 300,
+                                                  ci_interval = 0.95, ci_method = "percentile",
+                                                  cos_threshold = 0.5,
+                                                  save_means = FALSE,
+                                                  col_map = list(trait = "exp",
+                                                                 stim_id = "trial_name",
+                                                                 rating = "dv"))
+
+  future::plan(sequential)
+  saveRDS(stability_stats_emo_int, "cache/pos_emo.rds")
+} else {
+  stability_stats_emo_int <- readRDS("cache/pos_emo.rds")
+}
+
+summary_ci_emo_int <- stability_stats_emo_int$cis |>
+  group_by(exp, sample_size) |>
+  summarise(ul = mean(ul),
+            ll = mean(ll),
+            .groups = "drop")

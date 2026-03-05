@@ -568,21 +568,21 @@ icc_table <- data_trait |>
   mutate(across(where(is.numeric), ~ round(.x, 2)))
 ```
 
-In the first step, we calculated intraclass correlations for traits observed across tasks for our standardized images. The number of raters ranged from `r icc_table |> pull(n_raters) |> min()` to `r icc_table |> pull(n_raters) |> max()` for these traits. The average reliability across raters was very good for rating attractiveness, dominance, trustworthiness, and gender-typicality, but poorer for rating memorability (see @tbl-std-neu-agree).
+In the first step, we calculated intraclass correlation coefficients [ICC(2,k)] for ratings of standardized images. The number of raters ranged from `r icc_table |> pull(n_raters) |> min()` to `r icc_table |> pull(n_raters) |> max()` for each trait. The average reliability across raters was excellent for ratings of attractiveness, dominance, trustworthiness, and gender-typicality, but poorer for ratings of memorability (see @tbl-std-neu-icc).
 
 ```{r}
-#| label: tbl-std-neu-agree
-#| tbl-cap: Agreement for ratings of standardized neutral faces
+#| label: tbl-std-neu-icc
+#| tbl-cap: Intraclass correlation coefficients for ratings of standardized neutral faces
 
 icc_table
 ```
 
  
-Next, we examined the number of raters required for trait ratings to reach stable levels of reliability defined as ICC (2,k) values of 0.75 (see Figure 3). Attractiveness ratings stabilized with the fewest participants, reaching a median ICC (2,k) of 0.75 at approximately `r n_075[["attractive"]]` raters. It was also the only trait to exceed a median ICC (2,k) of 0.90, which occurred with `r n_090[["attractive"]]` raters. Ratings for dominance, trustworthiness, and gender-typicality reached a median ICC (2,k) of 0.75 with `r n_075[["dominant"]]` raters (see @fig-icc-cos). 
+Next, we examined the number of raters required for trait ratings to reach stable levels of reliability defined as ICC(2,k) values of 0.75 (see Figure 3). Attractiveness ratings stabilized with the fewest participants, reaching a median ICC(2,k) of 0.75 at approximately `r n_075[["attractive"]]` raters. It was also the only trait to exceed a median ICC(2,k) of 0.90, which occurred with `r n_090[["attractive"]]` raters. Ratings for dominance, trustworthiness, and gender-typicality reached a median ICC(2,k) of 0.75 with `r n_075[["dominant"]]` raters (see @fig-icc-cos). 
 
 ```{r}
 #| label: fig-icc-cos
-#| fig-cap: Corridors of stability for ICCs
+#| fig-cap: Corridors of stability for ICC
 #| fig-subcap: Dashed horizontal lines indicate ICC(2,k) of 0.75 and 0.90, respectively.
 
 icc2k_corridor_summary |> 
@@ -629,62 +629,204 @@ To further check inter-rater agreement, we used both Cronbach’s alpha (α) and
 
 ```{r}
 #| label: tbl-std-neu-alpha-omega
-#| tbl-cap: Agreement for ratings of standardized neutral faces
+#| tbl-cap: Cronbach’s alpha and McDonald’s omega total for ratings of standardized neutral faces.
 
 alpha_omega_table
 ```
  
 ##### Unstandardized Trait Ratings
 
-As with our standardized trait ratings, but for three rather than five traits, we calculated intraclass correlations for ratings to our unstandardized images observed across rating tasks. The number of raters ranged from 84 to 95 for these traits. The The average reliability across raters was very good for all trait ratings (see @tbl-unstd-neu-agree). All three traits also demonstrated excellent internal consistency (see @tbl-unstd-neu-agree) with Cronbach’s alpha (α) ranging from 0.88 to 0.95 and McDonald’s omega total (ωt) ranging from 0.90 to 0.96.
+```{r}
+#| warning: false
+#| message: false
+
+icc_table_unstd <- data_trait_unstd |> 
+  group_by(exp) |> 
+  group_map(calc_icc, check_dropped_raters = FALSE) |> 
+  bind_rows() |> 
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
+
+alpha_omega_table_unstd <- data_trait_unstd |> 
+  group_by(exp) |> 
+  group_map(calc_alpha_omega) |> 
+  bind_rows() |> 
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
+``` 
+
+As with standardized trait ratings, we calculated intraclass correlation coefficients for ratings of unstandardized images. The number of raters ranged from  `r icc_table_unstd |> pull(n_raters) |> min()` to `r icc_table_unstd |> pull(n_raters) |> max()`. Average inter-rater reliability was excellent for all three traits (see @tbl-unstd-neu-icc). This was further supported by Cronbach's α ranging from `r min(alpha_omega_table_unstd$alpha)` to `r max(alpha_omega_table_unstd$alpha)` and McDonald's ωt ranging from `r min(alpha_omega_table_unstd$omega_t)` to `r max(alpha_omega_table_unstd$omega_t)` (see @tbl-unstd-neu-alpha-omega).
 
 
 ```{r}
-#| label: tbl-unstd-neu-agree
+#| label: tbl-unstd-neu-icc
 #| tbl-cap: Agreement for ratings of unstandardized neutral faces
-# tbl-subcap: ICCs values are ICC (2,k) values.
 
-data.frame(1:5)
+icc_table_unstd
 ```
  
- 
+
+```{r}
+#| label: tbl-unstd-neu-alpha-omega
+#| tbl-cap: Cronbach’s alpha and McDonald’s omega total for ratings of unstandardized neutral faces.
+
+alpha_omega_table_unstd
+```
+
+
 ##### Emotion Intensity Ratings
 
-Next, we calculated the intraclass correlations and internal consistency metrics for our emotion intensity ratings. The number of raters ranged from 84 to 103 for our six emotions. The average reliability across raters was excellent for all of the emotions, with ICC (2,k) ranging from 0.95 to 0.98. Internal consistency was also excellent for all emotions in terms of Cronbach’s alpha (α = 0.97 to 0.99) and McDonald’s omega total (ωt = 0.97 to 0.99; see @tbl-emo-agree).
-
 ```{r}
-#| label: tbl-emo-agree
-#| tbl-cap: Agreement for ratings of emotional faces’ emotion intensity
-# tbl-subcap: ICCs values are ICC (2,k) values.
+#| warning: false
+#| message: false
+emo_icc_table <- data_emo_int |> 
+  group_by(exp) |> 
+  group_map(calc_icc) |> 
+  bind_rows() |> 
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
 
-data.frame(1:5)
+emo_alpha_omega_table <- data_emo_int |> 
+  group_by(exp) |> 
+  group_map(calc_alpha_omega) |> 
+  bind_rows() |> 
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
 ```
 
+Next, we calculated intraclass correlation coefficients, Cronbach's α, and McDonald's ωt for emotion intensity ratings. The number of raters ranged from `r emo_icc_table |> pull(n_raters) |> min()` to `r emo_icc_table |> pull(n_raters) |> max()`. The average reliability across raters was excellent for all emotions, with ICC(2,k) ranging from `r min(emo_icc_table[["ICC(2,k)"]])` to `r max(emo_icc_table[["ICC(2,k)"]])`, Cronbach’s α ranging from `r min(emo_alpha_omega_table$alpha)` to `r max(emo_alpha_omega_table$alpha)`, and  McDonald's ωt ranging from `r min(emo_alpha_omega_table$omega_t)` to `r max(emo_alpha_omega_table$omega_t)` (see @tbl-emo-icc and @tbl-emo-alpha-omega).
 
+
+```{r}
+#| label: tbl-emo-icc
+#| tbl-cap: Intraclass correlation coefficients for ratings of emotional faces’ emotion intensity
+
+emo_icc_table
+```
+
+```{r}
+#| label: tbl-emo-alpha-omega
+#| tbl-cap: Cronbach’s alpha and McDonald’s omega total for ratings of emotional faces’ emotion intensity
+
+emo_alpha_omega_table
+```
  
 #### Points of Stability
 
-To determine the number of raters required for stable ratings, we computed the point of stability (Hehman et al., 2025). This approach estimates the smallest sample size at which mean ratings stabilize by exceeding a cosine similarity threshold of 0.5 with the full-sample mean. As shown in Figures 4-6, the ratings to the standardized images reached stability between 37 and 45 raters, the ratings to the unstandardized images reached stability between 37 and 42 raters, and the ratings for the emotion intensities reached stability between 29 and 50 raters.
+To determine the number of raters required for stable ratings, we computed the point of stability (POS; Hehman et al., 2018) <!--add reference-->, defined as the smallest sample size at which 95% of resampled means fall within a corridor of stability of ±0.5 points and do not again exceed it. As shown in Figures 4-6, the ratings of standardized images reached stability between 37 and 44 raters, the ratings of unstandardized images between 37 and 41 raters, and emotion intensity ratings of standardized emotional faces between 29 and 50 raters.
 
 ```{r}
 #| label: fig-std-neu-pos
 #| fig-cap: Points of stability for ratings of standardised neutral faces
 
-ggplot()
+stability_stats_traits$pos$label <- paste0("Point of stability\n(N = ", stability_stats_traits$pos$pos, ")")
+
+summary_ci_traits |> 
+  ggplot(aes(x = sample_size)) +
+  geom_ribbon(aes(ymin = ll, ymax = ul, fill = exp),
+              alpha = 0.5) +
+  geom_vline(data = stability_stats_traits$pos,
+             aes(xintercept = pos),
+             colour = "black",
+             linetype = "solid",
+             linewidth = .75) +
+  geom_hline(yintercept = c(-0.5, 0.5),
+             linetype = "dashed",
+             colour = "grey30",
+             linewidth = 0.5) +
+  facet_wrap(~ exp) +
+  xlab("Sample size (N)") +
+  ylab("Centered mean ratings") +
+  scale_fill_manual(values = paul_tol) +
+  theme_minimal() +
+  theme(panel.grid.major = element_line(colour = "#e8e8e8"),
+        panel.grid.minor = element_line(colour = "#e8e8e8"),
+        strip.text = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12, face = "bold"),
+        legend.position = "none") +
+  geom_label(data = stability_stats_traits$pos,
+             aes(x = pos + 20, y = 1.6, label = label),
+             fill = NA,   
+             linewidth = 0,
+             colour = "black",    
+             size = 3.5,
+             inherit.aes = FALSE)
 ```
+
 
 ```{r}
 #| label: fig-unstd-neu-pos
 #| fig-cap: Points of stability for ratings of unstandardised neutral faces
 
-ggplot()
+stability_stats_traits_unstd$pos$label <- paste0("Point of stability\n(N = ", stability_stats_traits_unstd$pos$pos, ")")
+
+summary_ci_traits_unstd |> 
+  ggplot(aes(x = sample_size)) +
+  geom_ribbon(aes(ymin = ll, ymax = ul, fill = exp),
+              alpha = 0.5) +
+  geom_vline(data = stability_stats_traits_unstd$pos,
+             aes(xintercept = pos),
+             colour = "black",
+             linetype = "solid",
+             linewidth = .75) +
+  geom_hline(yintercept = c(-0.5, 0.5),
+             linetype = "dashed",
+             colour = "grey30",
+             linewidth = 0.5) +
+  facet_wrap(~ exp) +
+  xlab("Sample size (N)") +
+  ylab("Centered mean ratings") +
+  scale_fill_manual(values = paul_tol) +
+  theme_minimal() +
+  theme(panel.grid.major = element_line(colour = "#e8e8e8"),
+        panel.grid.minor = element_line(colour = "#e8e8e8"),
+        strip.text = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12, face = "bold"),
+        legend.position = "none") +
+  geom_label(data = stability_stats_traits_unstd$pos,
+             aes(x = pos + 20, y = 1.6, label = label),
+             fill = NA,   
+             linewidth = 0,
+             colour = "black",    
+             size = 3.5,
+             inherit.aes = FALSE)
 ```
 
 ```{r}
 #| label: fig-emo-pos
 #| fig-cap: Points of stability for emotion intensity ratings of standardised emotional faces of each expression
 
-ggplot()
+stability_stats_emo_int$pos$label <- paste0("Point of stability\n(N = ", stability_stats_emo_int$pos$pos, ")")
+
+summary_ci_emo_int |> 
+  ggplot(aes(x = sample_size)) +
+  geom_ribbon(aes(ymin = ll, ymax = ul, fill = exp),
+              alpha = 0.5) +
+  geom_vline(data = stability_stats_emo_int$pos,
+             aes(xintercept = pos),
+             colour = "black",
+             linetype = "solid",
+             linewidth = .75) +
+  geom_hline(yintercept = c(-0.5, 0.5),
+             linetype = "dashed",
+             colour = "grey30",
+             linewidth = 0.5) +
+  facet_wrap(~ exp) +
+  xlab("Sample size (N)") +
+  ylab("Centered mean ratings") +
+  scale_fill_manual(values = paul_tol) +
+  theme_minimal() +
+  theme(panel.grid.major = element_line(colour = "#e8e8e8"),
+        panel.grid.minor = element_line(colour = "#e8e8e8"),
+        strip.text = element_text(size = 12, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12, face = "bold"),
+        legend.position = "none") +
+  geom_label(data = stability_stats_emo_int$pos,
+             aes(x = pos + 20, y = 1.6, label = label),
+             fill = NA,   
+             linewidth = 0,
+             colour = "black",    
+             size = 3.5,
+             inherit.aes = FALSE)
 ```
 
  
